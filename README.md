@@ -12,7 +12,7 @@ Generated models contain entity fields, properties for reading values, propertie
 
 #### Examples
 
-#####Retrive entities
+Retrive entities
 
 ```csharp
             var brandsItems = await crmWebApi.GetList(Opportunity.EntitySetName, new CRMGetListOptions()
@@ -38,7 +38,7 @@ Generated models contain entity fields, properties for reading values, propertie
             var opportunities = brandsItems.List.ConvertAll(input => (Opportunity)Activator.CreateInstance(typeof(Opportunity), input));
 ```
 
-#####Update
+Update
 
 ```csharp
             var api = CrmWebApi();
