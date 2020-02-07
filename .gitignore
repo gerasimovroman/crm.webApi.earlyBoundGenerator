@@ -4,6 +4,10 @@
 
 /GRomash.CrmWebApiEarlyBoundGenerator/obj/Debug
 /.vs/GRomash.CrmWebApiEarlyBoundGenerator/v16
-/packages
-/GRomash.CrmWebApiEarlyBoundGenerator/bin
-/GRomash.CrmWebApiEarlyBoundGenerator/obj
+
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
+packages
