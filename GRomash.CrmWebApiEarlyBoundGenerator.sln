@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRomash.CrmWebApiEarlyBoundGenerator.Tests", "GRomash.CrmWebApiEarlyBoundGenerator.Tests\GRomash.CrmWebApiEarlyBoundGenerator.Tests.csproj", "{2CB6748F-DFC6-475A-AEDF-6FE3171A3509}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRomash.CrmWebApiEarlyBoundGenerator", "GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.csproj", "{A93F3E5D-CD91-4142-A8EC-5178BDC98853}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2CB6748F-DFC6-475A-AEDF-6FE3171A3509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CB6748F-DFC6-475A-AEDF-6FE3171A3509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CB6748F-DFC6-475A-AEDF-6FE3171A3509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CB6748F-DFC6-475A-AEDF-6FE3171A3509}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A93F3E5D-CD91-4142-A8EC-5178BDC98853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A93F3E5D-CD91-4142-A8EC-5178BDC98853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A93F3E5D-CD91-4142-A8EC-5178BDC98853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A93F3E5D-CD91-4142-A8EC-5178BDC98853}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D662132C-62B4-43C1-B7B8-682420B9FEDF}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://gerasimovroman.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = GRomash.CrmWebApiEarlyBoundGenerator.Tests\\GRomash.CrmWebApiEarlyBoundGenerator.Tests.csproj
+		SccProjectName1 = GRomash.CrmWebApiEarlyBoundGenerator.Tests
+		SccLocalPath1 = GRomash.CrmWebApiEarlyBoundGenerator.Tests
+		SccProjectUniqueName2 = GRomash.CrmWebApiEarlyBoundGenerator\\GRomash.CrmWebApiEarlyBoundGenerator.csproj
+		SccProjectName2 = GRomash.CrmWebApiEarlyBoundGenerator
+		SccLocalPath2 = GRomash.CrmWebApiEarlyBoundGenerator
+	EndGlobalSection
+EndGlobal

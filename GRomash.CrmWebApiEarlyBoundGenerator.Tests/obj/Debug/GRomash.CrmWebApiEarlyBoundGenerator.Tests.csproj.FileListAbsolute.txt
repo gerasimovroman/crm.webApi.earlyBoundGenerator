@@ -1,0 +1,14 @@
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\GRomash.CrmWebApiEarlyBoundGenerator.Tests.dll.config
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\GRomash.CrmWebApiEarlyBoundGenerator.Tests.dll
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\GRomash.CrmWebApiEarlyBoundGenerator.Tests.pdb
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\obj\Debug\GRomash.CrmWebApiEarlyBoundGenerator.Tests.csproj.CopyComplete
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\obj\Debug\GRomash.CrmWebApiEarlyBoundGenerator.Tests.dll
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\obj\Debug\GRomash.CrmWebApiEarlyBoundGenerator.Tests.pdb
+E:\GRomash\GRomash.CrmWebApiEarlyBoundGenerator\GRomash.CrmWebApiEarlyBoundGenerator.Tests\obj\Debug\GRomash.CrmWebApiEarlyBoundGenerator.Tests.csprojAssemblyReference.cache

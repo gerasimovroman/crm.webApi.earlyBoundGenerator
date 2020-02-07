@@ -1,0 +1,8 @@
+﻿		/// <summary>
+        /// {Description}
+        /// </summary>
+{Attributes}
+        public {Type} {PropertyName} {
+            get => GetAttributeValue<{Type}>({AttributeName});
+            set => SetAttributeValue({AttributeName}, value);
+        }
