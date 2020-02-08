@@ -1,0 +1,4 @@
+﻿        /// <summary>
+        /// {Description}
+        /// </summary>
+        {Name} = {Value},

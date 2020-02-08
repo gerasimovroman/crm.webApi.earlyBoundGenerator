@@ -43,17 +43,38 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
             {
                 var classModel = classBuilder.GetClassModel(entityMetadata, nameSpace);
 
-                var relationshipMetadatas = entityMetadata.OneToManyRelationships.Union(entityMetadata.ManyToOneRelationships).ToArray();
+                var relationshipMetadata = entityMetadata.OneToManyRelationships.Union(entityMetadata.ManyToOneRelationships).ToArray();
 
                 classModel.Properties =
-                    propsFactory.GetPropertyModels(entityMetadata.Attributes, relationshipMetadatas);
+                    propsFactory.GetPropertyModels(entityMetadata.Attributes, relationshipMetadata);
                 classModel.Fields =
                     fieldsFactory.GetFields(entityMetadata.Attributes);
                 classModel.Schemas = fieldsFactory.GetSchemaNames(entityMetadata.Attributes);
                 classModel.PropertiesFields = fieldsFactory.GetProperties(entityMetadata.ManyToManyRelationships, entityMetadata.ManyToOneRelationships);
 
-
                 fileBuilder.BuildClass(classModel);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Generates the option sets.
+        /// </summary>
+        /// <param name="nameSpace">The namespace.</param>
+        /// <param name="outFolder">The out folder.</param>
+        /// <param name="metadata">The metadata.</param>
+        public void GenerateOptionSets(string nameSpace, string outFolder, IEnumerable<PicklistAttributeMetadata> metadata)
+        {
+            var optionSetValueFactory = new OptionSetValueFactory();
+            var optionSetBuilder = new OptionSetBuilder(_metadataRepository);
+            var fileBuilder = new FileBuilder(outFolder);
+
+            foreach (var optionSetMetadata in metadata)
+            {
+                var model = optionSetBuilder.GetOptionSetModel(optionSetMetadata, nameSpace);
+                model.Values = optionSetValueFactory.GetValues(optionSetMetadata).ToArray();
+                fileBuilder.BuildOptionSet(model);
             }
         }
     }

@@ -136,6 +136,12 @@
   <data name="FieldConstTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Infrastructure\Templates\FieldConstTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="OptionSetTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Infrastructure\Templates\OptionSetTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="OptionSetValueTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Infrastructure\Templates\OptionSetValueTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="PropertyTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Infrastructure\Templates\PropertyTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

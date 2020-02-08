@@ -151,6 +151,31 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to namespace {Namespace}
+        ///{
+        ///	[GeneratedCode(&quot;CrmWebApiEarlyBoundGenerator&quot;, &quot;1.0.4.0&quot;)]
+        ///    public enum {OptionSetName}
+        ///    {
+        ///{Values}
+        ///    }
+        ///}.
+        /// </summary>
+        internal static string OptionSetTemplate {
+            get {
+                return ResourceManager.GetString("OptionSetTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 	{Name} = {Value}.
+        /// </summary>
+        internal static string OptionSetValueTemplate {
+            get {
+                return ResourceManager.GetString("OptionSetValueTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 		/// &lt;summary&gt;
         ///        /// {Description}
         ///        /// &lt;/summary&gt;

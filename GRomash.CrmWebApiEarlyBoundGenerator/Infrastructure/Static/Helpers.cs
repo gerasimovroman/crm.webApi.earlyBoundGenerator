@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 
 namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Static
@@ -36,5 +40,29 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Static
         /// The entity reference
         /// </summary>
         public const string EntityReference = "EntityReference";
+
+
+        /// <summary>
+        /// Gets the description.
+        /// </summary>
+        /// <param name="label">The label.</param>
+        /// <returns></returns>
+        public static string GetDescription(Label label)
+        {
+            var stringBuilder = new StringBuilder();
+
+            foreach (var labelLocalizedLabel in label.LocalizedLabels)
+            {
+                if (!string.IsNullOrWhiteSpace(labelLocalizedLabel.Label))
+                {
+                    stringBuilder.AppendLine(labelLocalizedLabel.Label);
+                }    
+            }
+
+            return stringBuilder.ToString().Trim();
+        }
+
+        public static int EnglishLanguageCode = 1033;
+
     }
 }

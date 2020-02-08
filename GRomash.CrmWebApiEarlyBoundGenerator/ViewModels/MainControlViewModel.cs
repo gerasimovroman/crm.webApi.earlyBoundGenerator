@@ -78,6 +78,10 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// </summary>
         private string _resultFolder;
         /// <summary>
+        /// The option sets result folder
+        /// </summary>
+        private string _optionSetsResultFolder;
+        /// <summary>
         /// The output logger service
         /// </summary>
         private readonly OutputLoggerService _outputLoggerService;
@@ -193,6 +197,16 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// </value>
         public ICommand GenerateCommand => new CommandBase(Generate);
 
+
+        /// <summary>
+        /// Gets the generate option sets command.
+        /// </summary>
+        /// <value>
+        /// The generate option sets command.
+        /// </value>
+        public ICommand GenerateOptionSetsCommand => new CommandBase(GenerateOptionSets);
+
+
         /// <summary>
         /// Gets the select file command.
         /// </summary>
@@ -268,6 +282,21 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the result folder.
+        /// </summary>
+        /// <value>
+        /// The result folder.
+        /// </value>
+        public string OptionSetsResultFolder
+        {
+            get => Path.Combine(ResultFolder, "OptionSets");
+            set {
+                _optionSetsResultFolder = value;
+                OnPropertyChanged(nameof(OptionSetsResultFolder));
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the output.
         /// </summary>
         /// <value>
@@ -281,6 +310,33 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
                 _output = value;
                 OnPropertyChanged(nameof(Output));
             }
+        }
+
+
+        /// <summary>
+        /// Generates the option sets.
+        /// </summary>
+        private async void GenerateOptionSets()
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    IsLoading = true;
+                    _outputLoggerService.Info($"Loading Web Api Metadata from CRM");
+                    _metadataRepository.ClearCache();
+                    var metadata = _metadataRepository.GetOptionSetMetadata(SelectedEntities.ToArray());
+                    _outputLoggerService.Info($"Generating option sets");
+                    _generationService.GenerateOptionSets(Namespace, OptionSetsResultFolder, metadata);
+                    _outputLoggerService.Info($"Option set generated to {OptionSetsResultFolder}");
+                }
+                catch (Exception e)
+                {
+                    _outputLoggerService.Error($"Error {e.Message} {e.StackTrace}");
+                }
+
+                IsLoading = false;
+            });
         }
 
         /// <summary>

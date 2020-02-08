@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
 using Microsoft.Xrm.Sdk;
@@ -63,16 +64,40 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Repository
         /// <summary>
         /// Gets the entities metadata.
         /// </summary>
-        /// <param name="entitites">The entitites.</param>
+        /// <param name="entities">The entities.</param>
         /// <returns></returns>
-        public IEnumerable<EntityMetadata> GetEntitiesMetadata(string[] entitites)
+        public IEnumerable<EntityMetadata> GetEntitiesMetadata(string[] entities)
         {
-            foreach (var entityLogicalName in entitites)
-            {
-                var metadata = GetEntityMetadata(entityLogicalName);
+            return entities.Select(GetEntityMetadata);
+        }
 
-                yield return metadata;
-            }
+
+        /// <summary>
+        /// Gets the option set metadata.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <returns></returns>
+        public IEnumerable<PicklistAttributeMetadata> GetOptionSetMetadata(string[] entities)
+        {
+            return entities.Select(entity => GetEntityMetadata(entity)).SelectMany(entityMetadata => 
+                entityMetadata.Attributes.Where(x => x.AttributeType == AttributeTypeCode.Picklist)).Cast<PicklistAttributeMetadata>();
+        }
+
+        /// <summary>
+        /// Gets the option set metadata.
+        /// </summary>
+        /// <param name="metadataId">The metadata identifier.</param>
+        /// <returns></returns>
+        public OptionSetMetadata GetOptionSetMetadata(Guid metadataId)
+        {
+            var retrieveEntityRequest = new RetrieveOptionSetRequest()
+            {
+                MetadataId = metadataId
+            };
+
+            var response = (RetrieveOptionSetResponse)_service.Execute(retrieveEntityRequest);
+
+            return (OptionSetMetadata)response.OptionSetMetadata;
         }
 
         /// <summary>
