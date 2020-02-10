@@ -175,6 +175,8 @@
     <Compile Include="Infrastructure\Builders\ClassBuilder.cs" />
     <Compile Include="Infrastructure\Builders\AttributeBuilders\EntityAttributeBuilder.cs" />
     <Compile Include="Infrastructure\Builders\AttributeBuilders\EntityReferenceAttributeBuilder.cs" />
+    <Compile Include="Infrastructure\Builders\EntityClassBuilder.cs" />
+    <Compile Include="Infrastructure\Builders\EntityModelBuilder.cs" />
     <Compile Include="Infrastructure\Builders\FieldsBuilder.cs" />
     <Compile Include="Infrastructure\Builders\FileBuilder.cs" />
     <Compile Include="Infrastructure\Builders\ITemplateBuilder.cs" />

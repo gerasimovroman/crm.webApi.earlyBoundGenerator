@@ -33,10 +33,13 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
         public void GenerateEntities(string nameSpace, string outFolder, string[] entities, IEnumerable<EntityMetadata> entityMetadatas)
         {
             var classBuilder = new ClassBuilder();
-            var fileBuilder = new FileBuilder(outFolder);
             var fieldsFactory = new FieldsFactory();
             var propsFactory = new PropertiesFactory(entities, _metadataRepository);
+            var entityClassBuilder = new EntityClassBuilder(outFolder);
+            var entityModelBuilder = new EntityModelBuilder(outFolder);
+            var fileBuilder = new FileBuilder(outFolder);
 
+            //entityClassBuilder.Create(nameSpace);
             fileBuilder.BuildBaseClass(nameSpace);
 
             foreach (var entityMetadata in entityMetadatas)
@@ -53,10 +56,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
                 classModel.PropertiesFields = fieldsFactory.GetProperties(entityMetadata.ManyToManyRelationships, entityMetadata.ManyToOneRelationships);
 
                 fileBuilder.BuildClass(classModel);
+                //entityModelBuilder.BuildClass(classModel, nameSpace);
             }
         }
-
-
 
         /// <summary>
         /// Generates the option sets.

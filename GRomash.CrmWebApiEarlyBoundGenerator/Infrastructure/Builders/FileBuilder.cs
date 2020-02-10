@@ -38,7 +38,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        private string CreatePath(string fileName)
+        protected string CreatePath(string fileName)
         {
             if (!Directory.Exists(_outFolder))
             {
@@ -46,6 +46,30 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             }
 
             return Path.Combine(_outFolder, fileName);
+        }
+
+        protected void GenerateFile(string nameSpace, string fileName, params CodeTypeDeclaration[] codeTypeDeclarations)
+        {
+            var compileUnit = new CodeCompileUnit();
+            var codeNamespace = new CodeNamespace(nameSpace);
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Reflection"));
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Linq"));
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System"));
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Collections.Generic"));
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Dynamic"));
+
+            var provider =
+                CodeDomProvider.CreateProvider("cs");
+
+
+            codeNamespace.Types.AddRange(codeTypeDeclarations);
+
+            compileUnit.Namespaces.Add(codeNamespace);
+
+            using (var sourceFile = new StreamWriter(CreatePath($"{fileName}.cs")))
+            {
+                provider.GenerateCodeFromCompileUnit(compileUnit, sourceFile, null);
+            }
         }
 
         /// <summary>
@@ -89,7 +113,6 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 
             File.WriteAllText(CreatePath($"{classModel.EntityName}.cs"), classTemplate, Encoding.Unicode);
         }
-
 
         /// <summary>
         /// Builds the option set.
