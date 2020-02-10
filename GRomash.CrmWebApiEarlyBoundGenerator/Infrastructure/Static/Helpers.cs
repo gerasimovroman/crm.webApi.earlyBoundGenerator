@@ -22,13 +22,13 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Static
             {AttributeTypeCode.DateTime, "DateTime?" },
             {AttributeTypeCode.Lookup, NullableGuid },
             {AttributeTypeCode.Boolean, "bool?"  },
-            {AttributeTypeCode.String, "string" },
+            {AttributeTypeCode.String, "String" },
             {AttributeTypeCode.Decimal, "decimal?" },
             {AttributeTypeCode.Double, "double?" },
             {AttributeTypeCode.Money, "decimal?" },
             {AttributeTypeCode.Owner, NullableGuid },
             {AttributeTypeCode.Uniqueidentifier, NullableGuid},
-            {AttributeTypeCode.Memo, "string"},
+            {AttributeTypeCode.Memo, "String"},
         };
 
         /// <summary>

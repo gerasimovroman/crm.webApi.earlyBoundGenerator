@@ -168,21 +168,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\Builders\AttributeBuilders\AttributeBuilderBase.cs" />
-    <Compile Include="Infrastructure\Builders\AttributeBuilders\AttributeBuilderBaseGeneric.cs" />
-    <Compile Include="Infrastructure\Builders\AttributeBuilders\DateOnlyAttributeBuilder.cs" />
-    <Compile Include="Infrastructure\Builders\BuilderBase.cs" />
-    <Compile Include="Infrastructure\Builders\ClassBuilder.cs" />
-    <Compile Include="Infrastructure\Builders\AttributeBuilders\EntityAttributeBuilder.cs" />
-    <Compile Include="Infrastructure\Builders\AttributeBuilders\EntityReferenceAttributeBuilder.cs" />
     <Compile Include="Infrastructure\Builders\EntityClassBuilder.cs" />
     <Compile Include="Infrastructure\Builders\EntityModelBuilder.cs" />
-    <Compile Include="Infrastructure\Builders\FieldsBuilder.cs" />
     <Compile Include="Infrastructure\Builders\FileBuilder.cs" />
     <Compile Include="Infrastructure\Builders\ITemplateBuilder.cs" />
     <Compile Include="Infrastructure\Builders\OptionSetBuilder.cs" />
-    <Compile Include="Infrastructure\Builders\OptionSetValuesBuilder.cs" />
-    <Compile Include="Infrastructure\Builders\PropertiesBuilder.cs" />
     <Compile Include="Command\CommandBase.cs" />
     <Compile Include="Controls\ListBoxCustom.cs" />
     <Compile Include="Controls\MainControl.xaml.cs">
@@ -192,7 +182,9 @@
     <Compile Include="Converter\InverseBooleanConverter.cs" />
     <Compile Include="Infrastructure\Extensions\ConnectionDetailsExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
+    <Compile Include="Infrastructure\Factory\ClassFactory.cs" />
     <Compile Include="Infrastructure\Factory\FieldsFactory.cs" />
+    <Compile Include="Infrastructure\Factory\OptionSetFactory.cs" />
     <Compile Include="Infrastructure\Factory\OptionSetValueFactory.cs" />
     <Compile Include="Infrastructure\Factory\PropertiesFactory.cs" />
     <Compile Include="Infrastructure\Model\ClassModel.cs" />

@@ -32,19 +32,19 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
         /// <param name="entityMetadatas">The entity metadatas.</param>
         public void GenerateEntities(string nameSpace, string outFolder, string[] entities, IEnumerable<EntityMetadata> entityMetadatas)
         {
-            var classBuilder = new ClassBuilder();
             var fieldsFactory = new FieldsFactory();
             var propsFactory = new PropertiesFactory(entities, _metadataRepository);
+
             var entityClassBuilder = new EntityClassBuilder(outFolder);
             var entityModelBuilder = new EntityModelBuilder(outFolder);
-            var fileBuilder = new FileBuilder(outFolder);
-
-            //entityClassBuilder.Create(nameSpace);
-            fileBuilder.BuildBaseClass(nameSpace);
+            var classFactory = new ClassFactory();
+            
+            //build Entity class
+            entityClassBuilder.Create(nameSpace);
 
             foreach (var entityMetadata in entityMetadatas)
             {
-                var classModel = classBuilder.GetClassModel(entityMetadata, nameSpace);
+                var classModel = classFactory.GetClassModel(entityMetadata, nameSpace);
 
                 var relationshipMetadata = entityMetadata.OneToManyRelationships.Union(entityMetadata.ManyToOneRelationships).ToArray();
 
@@ -55,8 +55,8 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
                 classModel.Schemas = fieldsFactory.GetSchemaNames(entityMetadata.Attributes);
                 classModel.PropertiesFields = fieldsFactory.GetProperties(entityMetadata.ManyToManyRelationships, entityMetadata.ManyToOneRelationships);
 
-                fileBuilder.BuildClass(classModel);
-                //entityModelBuilder.BuildClass(classModel, nameSpace);
+                //build model class
+                entityModelBuilder.BuildClass(classModel, nameSpace);
             }
         }
 
@@ -68,15 +68,18 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
         /// <param name="metadata">The metadata.</param>
         public void GenerateOptionSets(string nameSpace, string outFolder, IEnumerable<PicklistAttributeMetadata> metadata)
         {
+            var optionSetFactory = new OptionSetFactory(_metadataRepository);
+            var optionSetBuilder = new OptionSetBuilder(outFolder);
             var optionSetValueFactory = new OptionSetValueFactory();
-            var optionSetBuilder = new OptionSetBuilder(_metadataRepository);
-            var fileBuilder = new FileBuilder(outFolder);
 
             foreach (var optionSetMetadata in metadata)
             {
-                var model = optionSetBuilder.GetOptionSetModel(optionSetMetadata, nameSpace);
+                var model = optionSetFactory.GetOptionSetModel(optionSetMetadata, nameSpace);
                 model.Values = optionSetValueFactory.GetValues(optionSetMetadata).ToArray();
-                fileBuilder.BuildOptionSet(model);
+
+
+                //build option set file
+                optionSetBuilder.BuildOptionSet(model);
             }
         }
     }

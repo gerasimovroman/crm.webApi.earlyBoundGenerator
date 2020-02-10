@@ -70,7 +70,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                     {
                         var type = Helpers.Types[attributeType];
                         var propertyName = attributeMetadata.SchemaName;
-                        var attributeName = $"nameof({attributeMetadata.SchemaName})";
+                        var attributeName = attributeMetadata.SchemaName;
                         var description = Helpers.GetDescription(attributeMetadata.Description);
 
                         var propertyModel = new PropertyModel()
@@ -128,7 +128,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                         var entityMetadata = _metadataRepository.GetEntityMetadata(entityLogicalName);
                         var entitySetName = entityMetadata.EntitySetName;
                         var type = Helpers.EntityReference;
-                        var attributeName = $"\"{schemaName}@odata.bind\"";
+                        var attributeName = $"{schemaName}@odata.bind";
 
 
                         var entityReferenceAttributeModel = new EntityReferenceAttributeModel()
@@ -154,7 +154,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                         {
                             propertyModels.Add(new PropertyModel()
                             {
-                                AttributeName = $"nameof({schemaName})",
+                                AttributeName = schemaName,
                                 Description = description,
                                 PropertyName = $"{schemaName}Entity",
                                 Type = entityMetadata.SchemaName,

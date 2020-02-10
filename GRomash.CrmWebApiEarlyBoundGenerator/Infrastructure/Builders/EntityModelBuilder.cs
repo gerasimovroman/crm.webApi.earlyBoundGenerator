@@ -18,7 +18,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 
         public void BuildClass(ClassModel entityModel, string nameSpace)
         {
-            GenerateFile(nameSpace, entityModel.EntitySetName, GetClass(entityModel));
+            GenerateFile(nameSpace, entityModel.EntityName, GetClass(entityModel));
         }
 
         private CodeTypeDeclaration GetClass(ClassModel model)

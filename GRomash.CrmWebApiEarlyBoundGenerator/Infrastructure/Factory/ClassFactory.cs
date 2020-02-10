@@ -1,12 +1,14 @@
-﻿using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
 using Microsoft.Xrm.Sdk.Metadata;
 
-namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
+namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
 {
-    /// <summary>
-    /// Classes builder
-    /// </summary>
-    internal class ClassBuilder
+    public class ClassFactory
     {
         /// <summary>
         /// Gets the class model.

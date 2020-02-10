@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,44 +16,50 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
     /// <summary>
     /// Builder of OptionSetModel
     /// </summary>
-    public class OptionSetBuilder
+    public class OptionSetBuilder : FileBuilder
     {
-        /// <summary>
-        /// The metadata repository
-        /// </summary>
-        private readonly MetadataRepository _metadataRepository;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OptionSetBuilder"/> class.
-        /// </summary>
-        /// <param name="metadataRepository">The metadata repository.</param>
-        public OptionSetBuilder(MetadataRepository metadataRepository)
+        public OptionSetBuilder(string outFolder) : base(outFolder)
         {
-            _metadataRepository = metadataRepository;
         }
 
         /// <summary>
-        /// Gets the option set model.
+        /// Builds the option set.
         /// </summary>
-        /// <param name="metadata">The metadata.</param>
-        /// <param name="nameSpace">The name space.</param>
-        /// <returns></returns>
-        public OptionSetModel GetOptionSetModel(PicklistAttributeMetadata metadata, string nameSpace)
+        /// <param name="optionSetModel">The option set model.</param>
+        public void BuildOptionSet(OptionSetModel optionSetModel)
         {
-            var optionSetName = metadata.SchemaName;
+            var compileUnit = new CodeCompileUnit();
+            var codeNamespace = new CodeNamespace(optionSetModel.Namespace);
+            compileUnit.Namespaces.Add(codeNamespace);
 
-            if (metadata.OptionSet.IsGlobal == true)
+            var enumType = new CodeTypeDeclaration(optionSetModel.OptionSetName) { IsEnum = true };
+            enumType.Comments.Add(new CodeCommentStatement("<summary>"));
+            enumType.Comments.Add(new CodeCommentStatement(optionSetModel.Description));
+            enumType.Comments.Add(new CodeCommentStatement("</summary>"));
+
+
+            foreach (var optionSetValueModel in optionSetModel.Values)
             {
-                var entityMetadata = _metadataRepository.GetEntityMetadata(metadata.EntityLogicalName);
-                optionSetName = $"{entityMetadata.SchemaName}_{metadata.SchemaName}";
+                var f = new CodeMemberField
+                {
+                    Name = optionSetValueModel.Name,
+                    InitExpression = new CodePrimitiveExpression(optionSetValueModel.Value)
+                };
+                f.Comments.Add(new CodeCommentStatement("<summary>"));
+                f.Comments.Add(new CodeCommentStatement(optionSetValueModel.Description));
+                f.Comments.Add(new CodeCommentStatement("</summary>"));
+                enumType.Members.Add(f);
             }
 
-            return new OptionSetModel()
+            var provider =
+                CodeDomProvider.CreateProvider("cs");
+
+            codeNamespace.Types.Add(enumType);
+
+            using (var sourceFile = new StreamWriter(CreatePath($"{optionSetModel.OptionSetName}.cs")))
             {
-                OptionSetName = optionSetName,
-                Namespace = nameSpace,
-                Description = Helpers.GetDescription(metadata.Description)
-            };
+                provider.GenerateCodeFromCompileUnit(compileUnit, sourceFile, null);
+            }
         }
     }
 }
