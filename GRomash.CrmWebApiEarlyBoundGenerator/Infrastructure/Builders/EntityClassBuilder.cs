@@ -12,10 +12,18 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 {
     public class EntityClassBuilder : FileBuilder
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityClassBuilder"/> class.
+        /// </summary>
+        /// <param name="outFolder">The out folder.</param>
         public EntityClassBuilder(string outFolder) : base(outFolder)
         {
         }
 
+        /// <summary>
+        /// Creates the specified name space.
+        /// </summary>
+        /// <param name="nameSpace">The name space.</param>
         public void Create(string nameSpace)
         {
             GenerateFile(nameSpace, "Entity", 
@@ -27,6 +35,10 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
         }
 
 
+        /// <summary>
+        /// Creates the only date attribute.
+        /// </summary>
+        /// <returns></returns>
         private CodeTypeDeclaration CreateOnlyDateAttribute()
         {
             string name = "OnlyDateAttribute";
@@ -49,6 +61,10 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 
             return type;
         }
+        /// <summary>
+        /// Gets the entity attribute.
+        /// </summary>
+        /// <returns></returns>
         private CodeTypeDeclaration GetEntityAttribute()
         {
             var name = "EntityAttribute";
@@ -84,6 +100,10 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 
             return type;
         }
+        /// <summary>
+        /// Entities the reference attribute.
+        /// </summary>
+        /// <returns></returns>
         private CodeTypeDeclaration EntityReferenceAttribute()
         {
             var name = "EntityReferenceAttribute";
@@ -118,6 +138,10 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 
             return type;
         }
+        /// <summary>
+        /// Entities the reference.
+        /// </summary>
+        /// <returns></returns>
         private CodeTypeDeclaration EntityReference()
         {
             string name = "EntityReference";
@@ -149,10 +173,13 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 
             return type;
         }
+        /// <summary>
+        /// Entities the create.
+        /// </summary>
+        /// <returns></returns>
         private CodeTypeDeclaration EntityCreate()
         {
-            string name = "Entity";
-
+            var name = "Entity";
 
             var type = new CodeTypeDeclaration(name)
             {
@@ -330,7 +357,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                                                 new CodeConditionStatement(new CodeSnippetExpression("propertyWithEntityAttribute != null"), new CodeStatement[]
                                                 {
                                                     new CodeAssignStatement(new CodeVariableReferenceExpression("value"),
-                                                        new CodeSnippetExpression("Activator.CreateInstance(propertyWithEntityAttribute.PropertyType, valueExpandoObject)"))
+                                                        new CodeSnippetExpression("Activator.CreateInstance(propertyWithEntityAttribute.Command, valueExpandoObject)"))
                                                 }),
                                             },
                                             new CodeStatement[]
@@ -340,7 +367,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                                                 new CodeConditionStatement(new CodeSnippetExpression("propertyForField != null"), new CodeStatement[]
                                                 {
                                                     new CodeAssignStatement(new CodeVariableReferenceExpression("convertValueToType"),
-                                                        new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("propertyForField"), "PropertyType")),
+                                                        new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("propertyForField"), "Command")),
                                                 }),
                                             }
                                             ),
@@ -622,7 +649,13 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             return type;
         }
 
-
+        /// <summary>
+        /// Creates the automatic property.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
         private CodeTypeMember[] CreateAutoProperty(string propertyName, string fieldName, Type type)
         {
             var entityLogicalNameField = new CodeMemberField()

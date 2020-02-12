@@ -52,7 +52,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// <summary>
         /// The entities list
         /// </summary>
-        private IEnumerable<string> _entitiesList;
+        private IEnumerable<EntityModel> _entitiesList;
         /// <summary>
         /// The is loading
         /// </summary>
@@ -69,10 +69,11 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// The early bound settings
         /// </summary>
         private EarlyBoundSettings _earlyBoundSettings;
+
         /// <summary>
         /// The selected entities
         /// </summary>
-        private ObservableCollection<string> _selectedEntities = new ObservableCollection<string>();
+        private IEnumerable<EntityModel> _selectedEntities;
         /// <summary>
         /// The result folder
         /// </summary>
@@ -154,7 +155,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// <value>
         /// The entities list.
         /// </value>
-        public IEnumerable<string> EntitiesList
+        public IEnumerable<EntityModel> EntitiesList
         {
             get => _entitiesList;
             set
@@ -171,7 +172,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// <value>
         /// The selected entities.
         /// </value>
-        public ObservableCollection<string> SelectedEntities
+        public IEnumerable<EntityModel> SelectedEntities
         {
             get => _selectedEntities;
             set
@@ -196,17 +197,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// The generate command.
         /// </value>
         public ICommand GenerateCommand => new CommandBase(Generate);
-
-
-        /// <summary>
-        /// Gets the generate option sets command.
-        /// </summary>
-        /// <value>
-        /// The generate option sets command.
-        /// </value>
-        public ICommand GenerateOptionSetsCommand => new CommandBase(GenerateOptionSets);
-
-
+     
         /// <summary>
         /// Gets the select file command.
         /// </summary>
@@ -230,7 +221,6 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// The select result folder command.
         /// </value>
         public ICommand SelectResultFolderCommand => new CommandBase(SelectResultFolder);
-
 
         /// <summary>
         /// Gets or sets the settings path.
@@ -313,31 +303,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         }
 
 
-        /// <summary>
-        /// Generates the option sets.
-        /// </summary>
-        private async void GenerateOptionSets()
-        {
-            await Task.Run(() =>
-            {
-                try
-                {
-                    IsLoading = true;
-                    _outputLoggerService.Info($"Loading Web Api Metadata from CRM");
-                    _metadataRepository.ClearCache();
-                    var metadata = _metadataRepository.GetOptionSetMetadata(SelectedEntities.ToArray());
-                    _outputLoggerService.Info($"Generating option sets");
-                    _generationService.GenerateOptionSets(Namespace, OptionSetsResultFolder, metadata);
-                    _outputLoggerService.Info($"Option set generated to {OptionSetsResultFolder}");
-                }
-                catch (Exception e)
-                {
-                    _outputLoggerService.Error($"Error {e.Message} {e.StackTrace}");
-                }
 
-                IsLoading = false;
-            });
-        }
 
         /// <summary>
         /// Generates this instance.
@@ -367,10 +333,21 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
             IsLoading = true;
             _outputLoggerService.Info($"Loading Web Api Metadata from CRM");
             _metadataRepository.ClearCache();
-            var metadata = _metadataRepository.GetEntitiesMetadata(SelectedEntities.ToArray());
+
+            var selectedEntities = GetSelectedEntities();
+            var metadata = _metadataRepository.GetEntitiesMetadata(selectedEntities);
+            var optionSetMetadata = _metadataRepository.GetOptionSetMetadata(selectedEntities);
+
             _outputLoggerService.Info($"Generating entities");
-            _generationService.GenerateEntities(Namespace, ResultFolder, SelectedEntities.ToArray(), metadata);
+
+            _generationService.GenerateEntities(Namespace, ResultFolder, selectedEntities, metadata);
+            _generationService.GenerateOptionSets(Namespace, OptionSetsResultFolder, optionSetMetadata);
             _outputLoggerService.Info($"Entities generated to {ResultFolder}");
+        }
+
+        private string[] GetSelectedEntities()
+        {
+            return SelectedEntities.Select(x => x.LogicalName).ToArray();
         }
 
         /// <summary>
@@ -394,7 +371,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
                 try
                 {
                     _outputLoggerService.Info("Getting entities metadata from CRM");
-                    EntitiesList = _metadataRepository.GetEntities().Select(x => x.LogicalName);
+                    EntitiesList = _metadataRepository.GetEntities();
                     IsLoading = false;
                 }
                 catch (Exception e)
@@ -421,8 +398,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// </summary>
         private void SetSelectedEntities()
         {
-            SelectedEntities.Clear();
-            SelectedEntities.AddRange(_earlyBoundSettings.Entitites);
+            SelectedEntities = EntitiesList?.Where(x => _earlyBoundSettings.Entitites.Contains(x.LogicalName));
         }
 
         /// <summary>
@@ -446,7 +422,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
             }
 
             _earlyBoundSettings.Namespace = Namespace;
-            _earlyBoundSettings.Entitites = SelectedEntities;
+            _earlyBoundSettings.Entitites = GetSelectedEntities();
             _earlyBoundSettings.ResultFolder = ResultFolder;
 
             _earlyBoundSettingsRepository.Save(SettingsPath, _earlyBoundSettings);

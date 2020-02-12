@@ -66,7 +66,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
         /// <param name="nameSpace">The namespace.</param>
         /// <param name="outFolder">The out folder.</param>
         /// <param name="metadata">The metadata.</param>
-        public void GenerateOptionSets(string nameSpace, string outFolder, IEnumerable<PicklistAttributeMetadata> metadata)
+        public void GenerateOptionSets(string nameSpace, string outFolder, IEnumerable<EnumAttributeMetadata> metadata)
         {
             var optionSetFactory = new OptionSetFactory(_metadataRepository);
             var optionSetBuilder = new OptionSetBuilder(outFolder);

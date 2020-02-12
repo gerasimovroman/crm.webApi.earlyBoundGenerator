@@ -7,7 +7,8 @@
              xmlns:converter="clr-namespace:GRomash.CrmWebApiEarlyBoundGenerator.Converter"
              xmlns:controls="clr-namespace:GRomash.CrmWebApiEarlyBoundGenerator.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="1080" d:DesignWidth="1920">
+             d:DesignHeight="1080" d:DesignWidth="1920"
+             Name="Control">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -31,23 +32,27 @@
             <ColumnDefinition Width="23*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Margin="10" IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
-            <StackPanel>
-                <Button Name="RefreshEntitiesButton" Command="{Binding RefreshEntitiesCommand}">Refresh Entities</Button>
-            </StackPanel>
+        <Grid IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="229*"/>
+                <RowDefinition Height="300"/>
+            </Grid.RowDefinitions>
+            <Grid Margin="10"  Grid.Row="0">
+                <StackPanel>
+                    <Button Name="RefreshEntitiesButton" Command="{Binding RefreshEntitiesCommand}">Refresh Entities</Button>
+                </StackPanel>
 
-            <controls:ListBoxCustom x:Name="EntitiesListBox" ItemsSource="{Binding EntitiesList}" SelectedItemsList="{Binding SelectedEntities}"  SelectionMode="Multiple" Margin="0,35,0,35">
-            </controls:ListBoxCustom>
+                <controls:EntitiesTableControl x:Name="EntitiesTable" SelectedItems="{Binding SelectedEntities, Mode=TwoWay}" Items="{Binding EntitiesList}" Margin="0,0,0,40"></controls:EntitiesTableControl>
 
-            <Grid VerticalAlignment="Bottom">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Button Name="GenerateButton" Command="{Binding GenerateCommand}" Grid.Column="0" Margin="0,0,5,0">Generate</Button>
-                <Button  Command="{Binding GenerateOptionSetsCommand}" Grid.Column="1" Margin="5,0,0,0">Generate option sets</Button>
+                <StackPanel VerticalAlignment="Bottom">
+                    <Button Name="GenerateButton" Command="{Binding GenerateCommand}">Generate</Button>
+                </StackPanel>
+
             </Grid>
-
+            <Grid Margin="0,0,0,0" VerticalAlignment="Bottom" Grid.Row="1">
+                <Label>Output</Label>
+                <TextBox Text="{Binding Output}" TextWrapping="Wrap" Height="280" Margin="0,23,0,0"></TextBox>
+            </Grid>
         </Grid>
 
         <Grid Grid.Column="1" Margin="10" IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
@@ -74,10 +79,7 @@
                 </Grid>
             </StackPanel>
 
-            <Grid Margin="0,70,0,0" VerticalAlignment="Bottom">
-                <Label>Output</Label>
-                <TextBox Text="{Binding Output}" Height="300" TextWrapping="Wrap" Margin="0,23,0,0"></TextBox>
-            </Grid>
+          
         </Grid>
 
         <mah:ProgressRing IsActive="{Binding IsLoading}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="3" Grid.ColumnSpan="3" />

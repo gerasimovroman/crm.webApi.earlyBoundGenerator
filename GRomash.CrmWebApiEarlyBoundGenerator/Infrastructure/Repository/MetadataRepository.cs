@@ -77,10 +77,14 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Repository
         /// </summary>
         /// <param name="entities">The entities.</param>
         /// <returns></returns>
-        public IEnumerable<PicklistAttributeMetadata> GetOptionSetMetadata(string[] entities)
+        public IEnumerable<EnumAttributeMetadata> GetOptionSetMetadata(string[] entities)
         {
-            return entities.Select(entity => GetEntityMetadata(entity)).SelectMany(entityMetadata => 
-                entityMetadata.Attributes.Where(x => x.AttributeType == AttributeTypeCode.Picklist)).Cast<PicklistAttributeMetadata>();
+            var attributeMetadatas = entities.Select(entity => GetEntityMetadata(entity)).SelectMany(entityMetadata => 
+                entityMetadata.Attributes.Where(x => x.AttributeType == AttributeTypeCode.Picklist ||
+                                                     x.AttributeType == AttributeTypeCode.State ||
+                                                     x.AttributeType == AttributeTypeCode.Status));
+
+            return attributeMetadatas.Cast<EnumAttributeMetadata>();
         }
 
         /// <summary>

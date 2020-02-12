@@ -18,6 +18,10 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
     /// </summary>
     public class OptionSetBuilder : FileBuilder
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionSetBuilder"/> class.
+        /// </summary>
+        /// <param name="outFolder">The out folder.</param>
         public OptionSetBuilder(string outFolder) : base(outFolder)
         {
         }
@@ -33,10 +37,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             compileUnit.Namespaces.Add(codeNamespace);
 
             var enumType = new CodeTypeDeclaration(optionSetModel.OptionSetName) { IsEnum = true };
-            enumType.Comments.Add(new CodeCommentStatement("<summary>"));
-            enumType.Comments.Add(new CodeCommentStatement(optionSetModel.Description));
-            enumType.Comments.Add(new CodeCommentStatement("</summary>"));
-
+            AddSummaryComment(enumType, optionSetModel.Description);
 
             foreach (var optionSetValueModel in optionSetModel.Values)
             {
@@ -45,9 +46,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                     Name = optionSetValueModel.Name,
                     InitExpression = new CodePrimitiveExpression(optionSetValueModel.Value)
                 };
-                f.Comments.Add(new CodeCommentStatement("<summary>"));
-                f.Comments.Add(new CodeCommentStatement(optionSetValueModel.Description));
-                f.Comments.Add(new CodeCommentStatement("</summary>"));
+      
+                AddSummaryComment(f, optionSetValueModel.Description);
+
                 enumType.Members.Add(f);
             }
 

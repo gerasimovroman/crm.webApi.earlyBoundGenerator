@@ -12,21 +12,36 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 {
     public class EntityModelBuilder : FileBuilder
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityModelBuilder"/> class.
+        /// </summary>
+        /// <param name="outFolder">The out folder.</param>
         public EntityModelBuilder(string outFolder) : base(outFolder)
         {
         }
 
+        /// <summary>
+        /// Builds the class.
+        /// </summary>
+        /// <param name="entityModel">The entity model.</param>
+        /// <param name="nameSpace">The name space.</param>
         public void BuildClass(ClassModel entityModel, string nameSpace)
         {
             GenerateFile(nameSpace, entityModel.EntityName, GetClass(entityModel));
         }
 
+        /// <summary>
+        /// Gets the class.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         private CodeTypeDeclaration GetClass(ClassModel model)
         {
             var type = new CodeTypeDeclaration(model.EntityName)
             {
                 IsClass = true,
             };
+
 
             type.BaseTypes.Add(new CodeTypeReference("Entity"));
             type.Members.Add(new CodeMemberField()
@@ -76,6 +91,12 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             return type;
         }
 
+        /// <summary>
+        /// Gets the fields class.
+        /// </summary>
+        /// <param name="primaryAttributeId">The primary attribute identifier.</param>
+        /// <param name="fields">The fields.</param>
+        /// <returns></returns>
         private CodeTypeDeclaration GetFieldsClass(string primaryAttributeId, IEnumerable<FieldModel> fields)
         {
             var fieldModels = fields.ToList();
@@ -88,16 +109,32 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             return GetSubClass("Fields", fieldModels);
         }
 
+        /// <summary>
+        /// Gets the props.
+        /// </summary>
+        /// <param name="props">The props.</param>
+        /// <returns></returns>
         private CodeTypeDeclaration GetProps(IEnumerable<FieldModel> props)
         {
             return GetSubClass("Properties", props);
         }
 
+        /// <summary>
+        /// Gets the schemas.
+        /// </summary>
+        /// <param name="schemas">The schemas.</param>
+        /// <returns></returns>
         private CodeTypeDeclaration GetSchemas(IEnumerable<FieldModel> schemas)
         {
             return GetSubClass("Schemas", schemas);
         }
 
+        /// <summary>
+        /// Gets the sub class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="fields">The fields.</param>
+        /// <returns></returns>
         private static CodeTypeDeclaration GetSubClass(string name, IEnumerable<FieldModel> fields)
         {
             var codeType = new CodeTypeDeclaration()
@@ -121,6 +158,11 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             return codeType;
         }
 
+        /// <summary>
+        /// Gets the properties.
+        /// </summary>
+        /// <param name="properties">The properties.</param>
+        /// <returns></returns>
         private CodeTypeMember[] GetProperties(IEnumerable<PropertyModel> properties)
         {
             return properties.Select(x =>
@@ -154,7 +196,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                     }
                 };
 
-
+                AddSummaryComment(codeMemberProperty, x.Description);
 
                 codeMemberProperty.CustomAttributes.AddRange(x.Attributes.Select(y =>
                 {

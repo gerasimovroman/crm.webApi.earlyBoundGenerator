@@ -22,7 +22,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
         /// </summary>
         /// <param name="metadata">The metadata.</param>
         /// <returns></returns>
-        public IEnumerable<OptionSetValueModel> GetValues(PicklistAttributeMetadata metadata)
+        public IEnumerable<OptionSetValueModel> GetValues(EnumAttributeMetadata metadata)
         {
             return metadata.OptionSet.Options.Select(metadataOption => 
                 new OptionSetValueModel()

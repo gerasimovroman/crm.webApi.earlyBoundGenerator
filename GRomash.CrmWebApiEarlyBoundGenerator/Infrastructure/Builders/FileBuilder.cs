@@ -65,5 +65,21 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 provider.GenerateCodeFromCompileUnit(compileUnit, sourceFile, null);
             }
         }
+
+
+        /// <summary>
+        /// Adds the summary comment.
+        /// </summary>
+        /// <param name="codeTypeMember">The code type member.</param>
+        /// <param name="comment">The comment.</param>
+        protected void AddSummaryComment(CodeTypeMember codeTypeMember, string comment)
+        {
+            if (!string.IsNullOrWhiteSpace(comment))
+            {
+                codeTypeMember.Comments.Add(new CodeCommentStatement("<summary>"));
+                codeTypeMember.Comments.Add(new CodeCommentStatement(comment));
+                codeTypeMember.Comments.Add(new CodeCommentStatement("</summary>"));
+            }
+        }
     }
 }

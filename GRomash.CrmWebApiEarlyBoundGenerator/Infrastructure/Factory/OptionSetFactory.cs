@@ -12,8 +12,15 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
 {
     public class OptionSetFactory
     {
+        /// <summary>
+        /// The metadata repository
+        /// </summary>
         private readonly MetadataRepository _metadataRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionSetFactory"/> class.
+        /// </summary>
+        /// <param name="metadataRepository">The metadata repository.</param>
         public OptionSetFactory(MetadataRepository metadataRepository)
         {
             _metadataRepository = metadataRepository;
@@ -25,11 +32,11 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
         /// <param name="metadata">The metadata.</param>
         /// <param name="nameSpace">The name space.</param>
         /// <returns></returns>
-        public OptionSetModel GetOptionSetModel(PicklistAttributeMetadata metadata, string nameSpace)
+        public OptionSetModel GetOptionSetModel(EnumAttributeMetadata metadata, string nameSpace)
         {
             var optionSetName = metadata.SchemaName;
 
-            if (metadata.OptionSet.IsGlobal == true)
+            if (metadata.OptionSet.IsGlobal == false)
             {
                 var entityMetadata = _metadataRepository.GetEntityMetadata(metadata.EntityLogicalName);
                 optionSetName = $"{entityMetadata.SchemaName}_{metadata.SchemaName}";
