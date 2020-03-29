@@ -181,6 +181,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\CommandGeneric.cs" />
+    <Compile Include="Controls\EntitiesSelectionControl.xaml.cs">
+      <DependentUpon>EntitiesSelectionControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EntitiesTableControl.xaml.cs">
       <DependentUpon>EntitiesTableControl.xaml</DependentUpon>
     </Compile>
@@ -258,6 +261,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Controls\EntitiesSelectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\EntitiesTableControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -267,25 +274,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Infrastructure\Templates\ClassTemplate.txt" />
-    <Content Include="Infrastructure\Templates\Entity.txt" />
-    <Content Include="Infrastructure\Templates\EntityAttributeTemplate.txt" />
-    <Content Include="Infrastructure\Templates\DateOnlyAttributeTemplate.txt" />
-    <Content Include="Infrastructure\Templates\EntityReferenceAttributeTemplate.txt" />
-    <Content Include="Infrastructure\Templates\FieldConstTemplate.txt" />
-    <Content Include="Infrastructure\Templates\OptionSetTemplate.txt" />
-    <Content Include="Infrastructure\Templates\OptionSetValueTemplate.txt" />
-    <Content Include="Infrastructure\Templates\PropertyTemplate.txt" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF $(ConfigurationName) == Debug (
       IF NOT EXIST Plugins mkdir Plugins
       xcopy "$(TargetDir)$(TargetFileName)" "$(TargetDir)Plugins\" /Y
       xcopy "$(TargetDir)$(TargetName).pdb" "$(TargetDir)Plugins\" /Y
-     ::del "$(TargetDir)$(TargetFileName)" 
-      ::del "$(TargetDir)$(TargetName).pdb"
+      del "$(TargetDir)$(TargetFileName)" 
+      del "$(TargetDir)$(TargetName).pdb"
       )</PostBuildEvent>
   </PropertyGroup>
   <!-- Настройки ILMerge после билда -->

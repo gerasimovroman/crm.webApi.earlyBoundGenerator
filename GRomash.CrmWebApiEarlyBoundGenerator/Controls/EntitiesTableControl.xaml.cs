@@ -9,6 +9,7 @@ using System.Windows.Media;
 using GRomash.CrmWebApiEarlyBoundGenerator.Command;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Extensions;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
+using GRomash.CrmWebApiEarlyBoundGenerator.ViewModels;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -20,12 +21,10 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Controls
     public partial class EntitiesTableControl 
     {
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
-            "Items", typeof(IEnumerable<EntityModel>), typeof(EntitiesTableControl), new PropertyMetadata());
-        public static readonly DependencyProperty SelectionChangedCommandProperty = DependencyProperty.Register(
-            "SelectionChangedCommand", typeof(ICommand), typeof(EntitiesTableControl), new PropertyMetadata(default(ICommand)));
+            "Items", typeof(ObservableCollection<EntityModel>), typeof(EntitiesTableControl), new PropertyMetadata(default(ObservableCollection<EntityModel>)));
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
-            "SelectedItems", typeof(IEnumerable<EntityModel>), typeof(EntitiesTableControl), new PropertyMetadata(SelectedItemsChanged));
-      
+            "SelectedItems", typeof(ObservableCollection<EntityModel>), typeof(EntitiesTableControl), new PropertyMetadata(new ObservableCollection<EntityModel>()));
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntitiesTableControl"/> class.
@@ -33,85 +32,22 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Controls
         public EntitiesTableControl()
         {
             InitializeComponent();
-            SelectionChangedCommand = new CommandGeneric<ObservableCollection<object>>(SelectionChanged);
         }
 
-        /// <summary>
-        /// Gets or sets the selected items.
-        /// </summary>
-        /// <value>
-        /// The selected items.
-        /// </value>
-        public IEnumerable<EntityModel> SelectedItems
+        public ObservableCollection<EntityModel> Items
+        {
+            get => (ObservableCollection<EntityModel>) GetValue(ItemsProperty);
+            set => SetValue(ItemsProperty, value);
+        }
+
+        public ObservableCollection<EntityModel> SelectedItems
         {
             get => (ObservableCollection<EntityModel>) GetValue(SelectedItemsProperty);
             set => SetValue(SelectedItemsProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets the items.
-        /// </summary>
-        /// <value>
-        /// The items.
-        /// </value>
-        public IEnumerable<EntityModel> Items
-        {
-            get => (IEnumerable<EntityModel>) GetValue(ItemsProperty);
-            set => SetValue(ItemsProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the selection changed command.
-        /// </summary>
-        /// <value>
-        /// The selection changed command.
-        /// </value>
-        public ICommand SelectionChangedCommand
-        {
-            get => (ICommand)GetValue(SelectionChangedCommandProperty);
-            set => SetValue(SelectionChangedCommandProperty, value);
-        }
 
 
-
-
-        /// <summary>
-        /// Selecteds the items changed.
-        /// </summary>
-        /// <param name="o">The o.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
-        private static void SelectedItemsChanged(DependencyObject o, DependencyPropertyChangedEventArgs args)
-        {
-            var entitiesTableControl = (EntitiesTableControl)o;
-
-            if (entitiesTableControl != null &&
-                args.NewValue is IEnumerable<EntityModel> newItems)
-            {
-                var dataGrid = entitiesTableControl.DataGrid;
-                var dataGridSelectedItems = dataGrid.SelectedItems;
-                var entityModels = newItems as EntityModel[] ?? newItems.ToArray();
-
-                if (dataGridSelectedItems.Count != entityModels.Length &&
-                    entityModels.Except(dataGridSelectedItems.Cast<EntityModel>()).Any())
-                {
-                    var indexes = entityModels.Select(x => dataGrid.Items.IndexOf(x)).Where(x => x >= 0).ToArray();
-
-                    if (indexes.Any())
-                    {
-                        dataGrid.SelectRowByIndexes(indexes);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Selections the changed.
-        /// </summary>
-        /// <param name="selectedItems">The selected items.</param>
-        private void SelectionChanged(ObservableCollection<object> selectedItems)
-        {
-            SelectedItems = selectedItems.Cast<EntityModel>().ToList();
-        }
 
         /// <summary>
         /// Mouses the enter handler.
@@ -138,6 +74,25 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Controls
 
             row.IsSelected = !row.IsSelected;
             e.Handled = true;
+        }
+
+        private void DataGrid_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                foreach (var addedItem in e.AddedItems)
+                {
+                    SelectedItems.Add(addedItem as EntityModel);
+                }
+            }
+
+            if (e.RemovedItems.Count > 0)
+            {
+                foreach (var removedItem in e.RemovedItems)
+                {
+                    SelectedItems.Remove(removedItem as EntityModel);
+                }
+            }
         }
     }
 }

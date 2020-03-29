@@ -19,6 +19,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model
             return false;
         }
 
+        public bool IsSelected { get; set; }
+
+
         public override int GetHashCode()
         {
             return LogicalName == null ? base.GetHashCode() : LogicalName.GetHashCode();

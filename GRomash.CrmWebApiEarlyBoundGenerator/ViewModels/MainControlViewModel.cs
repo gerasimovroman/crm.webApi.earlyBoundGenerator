@@ -52,7 +52,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// <summary>
         /// The entities list
         /// </summary>
-        private IEnumerable<EntityModel> _entitiesList;
+        private ObservableCollection<EntityModel> _entitiesList;
         /// <summary>
         /// The is loading
         /// </summary>
@@ -69,11 +69,10 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// The early bound settings
         /// </summary>
         private EarlyBoundSettings _earlyBoundSettings;
-
         /// <summary>
         /// The selected entities
         /// </summary>
-        private IEnumerable<EntityModel> _selectedEntities;
+        private ObservableCollection<EntityModel> _selectedEntities;
         /// <summary>
         /// The result folder
         /// </summary>
@@ -91,10 +90,17 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// </summary>
         private string _output;
         /// <summary>
+        /// The include option sets
+        /// </summary>
+        private bool _includeOptionSets;
+        /// <summary>
         /// The folder
         /// </summary>
         private const string Folder = nameof(CrmWebApiEarlyBoundGenerator);
-
+        /// <summary>
+        /// All entities
+        /// </summary>
+        private EntityModel[] _allEntities;
         #endregion
 
         /// <summary>
@@ -155,14 +161,13 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// <value>
         /// The entities list.
         /// </value>
-        public IEnumerable<EntityModel> EntitiesList
+        public ObservableCollection<EntityModel> EntitiesList
         {
             get => _entitiesList;
             set
             {
                 _entitiesList = value;
                 OnPropertyChanged(nameof(EntitiesList));
-                SetSelectedEntities();
             }
         }
 
@@ -172,7 +177,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// <value>
         /// The selected entities.
         /// </value>
-        public IEnumerable<EntityModel> SelectedEntities
+        public ObservableCollection<EntityModel> SelectedEntities
         {
             get => _selectedEntities;
             set
@@ -181,6 +186,8 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
                 OnPropertyChanged(nameof(SelectedEntities));
             }
         }
+
+
 
         /// <summary>
         /// Gets the refresh entities command.
@@ -302,7 +309,15 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
             }
         }
 
-
+        public bool IncludeOptionSets
+        {
+            get => _includeOptionSets;
+            set
+            {
+                _includeOptionSets = value;
+                OnPropertyChanged(nameof(IncludeOptionSets));
+            }
+        }
 
 
         /// <summary>
@@ -341,7 +356,12 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
             _outputLoggerService.Info($"Generating entities");
 
             _generationService.GenerateEntities(Namespace, ResultFolder, selectedEntities, metadata);
-            _generationService.GenerateOptionSets(Namespace, OptionSetsResultFolder, optionSetMetadata);
+
+            if (IncludeOptionSets)
+            {
+                _generationService.GenerateOptionSets(Namespace, OptionSetsResultFolder, optionSetMetadata);
+            }
+
             _outputLoggerService.Info($"Entities generated to {ResultFolder}");
         }
 
@@ -371,14 +391,31 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
                 try
                 {
                     _outputLoggerService.Info("Getting entities metadata from CRM");
-                    EntitiesList = _metadataRepository.GetEntities();
-                    IsLoading = false;
+                    _allEntities = _metadataRepository.GetEntities().ToArray();
+                    SetEntities();
                 }
                 catch (Exception e)
                 {
-                    _outputLoggerService.Error($"Error on loading entities metadata from CRM {e.Message} {e.StackTrace}");
+                    _outputLoggerService.Error(
+                        $"Error on loading entities metadata from CRM {e.Message} {e.StackTrace}");
+                }
+                finally
+                {
+                    IsLoading = false;
                 }
             });
+        }
+
+        private void SetEntities()
+        {
+            if (_allEntities != null)
+            {
+                var selectedEntities = _allEntities.Where(x => _earlyBoundSettings.Entitites.Contains(x.LogicalName)).ToArray();
+                var notSelectedEntities = _allEntities.Except(selectedEntities);
+
+                EntitiesList = new ObservableCollection<EntityModel>(notSelectedEntities);
+                SelectedEntities = new ObservableCollection<EntityModel>(selectedEntities);
+            }
         }
 
         /// <summary>
@@ -389,18 +426,11 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
             _earlyBoundSettings = _earlyBoundSettingsRepository.GetSettings(SettingsPath);
             Namespace = _earlyBoundSettings.Namespace;
             ResultFolder = _earlyBoundSettings.ResultFolder;
-
-            SetSelectedEntities();
+            IncludeOptionSets = _earlyBoundSettings.IncludeOptionSets;
+            SetEntities();
         }
 
-        /// <summary>
-        /// Sets the selected entities.
-        /// </summary>
-        private void SetSelectedEntities()
-        {
-            SelectedEntities = EntitiesList?.Where(x => _earlyBoundSettings.Entitites.Contains(x.LogicalName));
-        }
-
+        
         /// <summary>
         /// Saves the settings.
         /// </summary>
@@ -424,6 +454,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
             _earlyBoundSettings.Namespace = Namespace;
             _earlyBoundSettings.Entitites = GetSelectedEntities();
             _earlyBoundSettings.ResultFolder = ResultFolder;
+            _earlyBoundSettings.IncludeOptionSets = IncludeOptionSets;
 
             _earlyBoundSettingsRepository.Save(SettingsPath, _earlyBoundSettings);
 
