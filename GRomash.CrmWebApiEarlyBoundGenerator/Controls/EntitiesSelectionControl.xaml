@@ -34,8 +34,8 @@
                             <Setter Property="Padding" Value="5"></Setter>
                         </Style>
                     </StackPanel.Resources>
-                    <Button Content="&gt;"  Command="{Binding SelectEntitiesCommand, ElementName=_entitiesSelectionControl}" CommandParameter="{Binding ElementName=_entitiesTable, Path=SelectedItems}"></Button>
-                    <Button Content="&lt;" Margin="0,10,0,0" Command="{Binding UnselectEntitiesCommand, ElementName=_entitiesSelectionControl}" CommandParameter="{Binding ElementName=_selectedEntitiesTable, Path=SelectedItems}"></Button>
+                    <Button Content="&gt;" IsEnabled="{Binding HasSelectedItems, ElementName=_entitiesTable}"  Command="{Binding SelectEntitiesCommand, ElementName=_entitiesSelectionControl}" CommandParameter="{Binding ElementName=_entitiesTable, Path=SelectedItems}"></Button>
+                    <Button Content="&lt;" IsEnabled="{Binding HasSelectedItems, ElementName=_selectedEntitiesTable}" Margin="0,10,0,0" Command="{Binding UnselectEntitiesCommand, ElementName=_entitiesSelectionControl}" CommandParameter="{Binding ElementName=_selectedEntitiesTable, Path=SelectedItems}"></Button>
                 </StackPanel>
             </Grid>
 

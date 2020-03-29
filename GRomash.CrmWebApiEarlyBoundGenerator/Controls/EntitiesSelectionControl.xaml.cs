@@ -24,16 +24,10 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Controls
         public static readonly DependencyProperty SelectEntitiesCommandProperty = DependencyProperty.Register(
             "SelectEntitiesCommand", typeof(ICommand), typeof(EntitiesSelectionControl), new PropertyMetadata(default(ICommand)));
         public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(
-            "SearchText", typeof(string), typeof(EntitiesSelectionControl), new PropertyMetadata(SearchTextChanged));
+            "SearchText", typeof(string), typeof(EntitiesSelectionControl), new PropertyMetadata(default(string)));
 
 
-        private static void SearchTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is EntitiesSelectionControl self)
-            {
-
-            }
-        }
+     
 
         public EntitiesSelectionControl()
         {

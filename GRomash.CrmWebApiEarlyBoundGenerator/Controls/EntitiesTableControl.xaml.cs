@@ -21,7 +21,19 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Controls
     public partial class EntitiesTableControl 
     {
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
-            "Items", typeof(ObservableCollection<EntityModel>), typeof(EntitiesTableControl), new PropertyMetadata(default(ObservableCollection<EntityModel>)));
+            "Items", typeof(ObservableCollection<EntityModel>), typeof(EntitiesTableControl), new PropertyMetadata(default(ObservableCollection<EntityModel>), ItemsPropChanged));
+
+        private static void ItemsPropChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is EntitiesTableControl self)
+            {
+                if (e.NewValue is ObservableCollection<EntityModel> items)
+                {
+                    items.CollectionChanged += self.Items_CollectionChanged;
+                }
+            }
+        }
+
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
             "SelectedItems", typeof(ObservableCollection<EntityModel>), typeof(EntitiesTableControl), new PropertyMetadata(new ObservableCollection<EntityModel>()));
 
@@ -32,6 +44,24 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Controls
         public EntitiesTableControl()
         {
             InitializeComponent();
+            if (Items != null) Items.CollectionChanged += Items_CollectionChanged;
+        }
+
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.OldItems != null)
+            {
+                foreach (var entityModel in e.OldItems.Cast<EntityModel>())
+                {
+                    if (SelectedItems.Contains(entityModel))
+                    {
+                        SelectedItems.Remove(entityModel);
+                    }
+                }
+
+                SetHasSelectedItems();
+            }
+
         }
 
         public ObservableCollection<EntityModel> Items
@@ -46,8 +76,14 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Controls
             set => SetValue(SelectedItemsProperty, value);
         }
 
+        public static readonly DependencyProperty HasSelectedItemsProperty = DependencyProperty.Register(
+            "HasSelectedItems", typeof(bool), typeof(EntitiesTableControl), new PropertyMetadata(default(bool)));
 
-
+        public bool HasSelectedItems
+        {
+            get => (bool) GetValue(HasSelectedItemsProperty);
+            set => SetValue(HasSelectedItemsProperty, value);
+        }
 
         /// <summary>
         /// Mouses the enter handler.
@@ -93,6 +129,13 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Controls
                     SelectedItems.Remove(removedItem as EntityModel);
                 }
             }
+
+            SetHasSelectedItems();
+        }
+
+        private void SetHasSelectedItems()
+        {
+            HasSelectedItems = SelectedItems.Any();
         }
     }
 }
