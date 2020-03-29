@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
 using GRomash.CrmWebApiEarlyBoundGenerator.Command;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
 using NuGet;
