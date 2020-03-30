@@ -70,8 +70,8 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                     {
                         var type = Helpers.Types[attributeType];
                         var propertyName = attributeMetadata.SchemaName;
-                        var attributeName = $"nameof({attributeMetadata.SchemaName})";
-                        var description = GetDescription(attributeMetadata);
+                        var attributeName = attributeMetadata.SchemaName;
+                        var description = Helpers.GetDescription(attributeMetadata.Description);
 
                         var propertyModel = new PropertyModel()
                         {
@@ -98,17 +98,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
             return propertyModels.ToArray();
         }
 
-        /// <summary>
-        /// Gets the description.
-        /// </summary>
-        /// <param name="attributeMetadata">The attribute metadata.</param>
-        /// <returns></returns>
-        private string GetDescription(AttributeMetadata attributeMetadata)
-        {
-            return attributeMetadata.Description.LocalizedLabels.Select(x => x.Label)
-                .Aggregate(string.Empty,
-                    (x, y) => $"{x} {y}");
-        }
+      
 
         /// <summary>
         /// Gets the entity reference props.
@@ -127,7 +117,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                 {
                     var schemaName = attributeMetadata.SchemaName;
                     var propertyLogicalName = attributeMetadata.LogicalName;
-                    var description = GetDescription(attributeMetadata);
+                    var description = Helpers.GetDescription(attributeMetadata.Description);
                     var valueField = $"_{propertyLogicalName}_value";
                     var relationship = oneToManyRelationshipMetadatas.FirstOrDefault(x => x.ReferencedAttribute == attributeMetadata.LogicalName ||
                                                                                  x.ReferencingAttribute == attributeMetadata.LogicalName);
@@ -138,7 +128,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                         var entityMetadata = _metadataRepository.GetEntityMetadata(entityLogicalName);
                         var entitySetName = entityMetadata.EntitySetName;
                         var type = Helpers.EntityReference;
-                        var attributeName = $"\"{schemaName}@odata.bind\"";
+                        var attributeName = $"{schemaName}@odata.bind";
 
 
                         var entityReferenceAttributeModel = new EntityReferenceAttributeModel()
@@ -164,7 +154,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                         {
                             propertyModels.Add(new PropertyModel()
                             {
-                                AttributeName = $"nameof({schemaName})",
+                                AttributeName = schemaName,
                                 Description = description,
                                 PropertyName = $"{schemaName}Entity",
                                 Type = entityMetadata.SchemaName,

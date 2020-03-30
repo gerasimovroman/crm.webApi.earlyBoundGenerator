@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.CodeDom;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
@@ -9,18 +11,12 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
     /// <summary>
     /// File builder
     /// </summary>
-    /// <seealso cref="GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders.BuilderBase" />
-    public class FileBuilder : BuilderBase
+    public class FileBuilder 
     {
         /// <summary>
         /// The out folder
         /// </summary>
         private readonly string _outFolder;
-        /// <summary>
-        /// The entity class file name
-        /// </summary>
-        private const string EntityClassFileName = "Entity.cs";
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileBuilder"/> class.
@@ -36,7 +32,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        private string CreatePath(string fileName)
+        protected string CreatePath(string fileName)
         {
             if (!Directory.Exists(_outFolder))
             {
@@ -46,47 +42,44 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             return Path.Combine(_outFolder, fileName);
         }
 
-        /// <summary>
-        /// Builds the base class.
-        /// </summary>
-        /// <param name="nameSpace">The name space.</param>
-        public void BuildBaseClass(string nameSpace)
+        protected void GenerateFile(string nameSpace, string fileName, params CodeTypeDeclaration[] codeTypeDeclarations)
         {
-            var contents = Replace(new Dictionary<string, string>()
-            {
-                {nameof(ClassModel.Namespace), nameSpace}
-            }, Resources.Entity);
+            var compileUnit = new CodeCompileUnit();
+            var codeNamespace = new CodeNamespace(nameSpace);
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Reflection"));
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Linq"));
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System"));
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Collections.Generic"));
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Dynamic"));
 
-            File.WriteAllText(CreatePath(EntityClassFileName), contents);
+            var provider =
+                CodeDomProvider.CreateProvider("cs");
+
+
+            codeNamespace.Types.AddRange(codeTypeDeclarations);
+
+            compileUnit.Namespaces.Add(codeNamespace);
+
+            using (var sourceFile = new StreamWriter(CreatePath($"{fileName}.cs")))
+            {
+                provider.GenerateCodeFromCompileUnit(compileUnit, sourceFile, null);
+            }
         }
 
+
         /// <summary>
-        /// Builds the class.
+        /// Adds the summary comment.
         /// </summary>
-        /// <param name="classModel">The class model.</param>
-        public void BuildClass(ClassModel classModel)
+        /// <param name="codeTypeMember">The code type member.</param>
+        /// <param name="comment">The comment.</param>
+        protected void AddSummaryComment(CodeTypeMember codeTypeMember, string comment)
         {
-            var classTemplate = Resources.ClassTemplate;
-
-            var propsBuilder = new PropertiesBuilder();
-            var fieldsBuilder = new FieldsBuilder();
-
-            var replaces = new Dictionary<string, string>()
+            if (!string.IsNullOrWhiteSpace(comment))
             {
-                {nameof(classModel.Namespace), classModel.Namespace},
-                {nameof(classModel.EntityName), classModel.EntityName},
-                {nameof(classModel.EntitySetName), classModel.EntitySetName},
-                {nameof(classModel.EntityLogicalName), classModel.EntityLogicalName},
-                {nameof(classModel.PrimaryIdAttribute), classModel.PrimaryIdAttribute},
-                {nameof(classModel.Properties), propsBuilder.Build(classModel.Properties)},
-                {nameof(classModel.Fields), fieldsBuilder.Build(classModel.Fields)},
-                {nameof(classModel.PropertiesFields), fieldsBuilder.Build(classModel.PropertiesFields)},
-                {nameof(classModel.Schemas), fieldsBuilder.Build(classModel.Schemas)},
-            };
-
-            classTemplate = Replace(replaces, classTemplate);
-
-            File.WriteAllText(CreatePath($"{classModel.EntityName}.cs"), classTemplate, Encoding.Unicode);
+                codeTypeMember.Comments.Add(new CodeCommentStatement("<summary>"));
+                codeTypeMember.Comments.Add(new CodeCommentStatement(comment));
+                codeTypeMember.Comments.Add(new CodeCommentStatement("</summary>"));
+            }
         }
     }
 }

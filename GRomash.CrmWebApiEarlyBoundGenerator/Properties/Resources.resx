@@ -117,26 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ClassTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Infrastructure\Templates\ClassTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="DateOnlyAttributeTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Infrastructure\Templates\DateOnlyAttributeTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Entity" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Infrastructure\Templates\Entity.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityAttributeTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Infrastructure\Templates\EntityAttributeTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityReferenceAttributeTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Infrastructure\Templates\EntityReferenceAttributeTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="FieldConstTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Infrastructure\Templates\FieldConstTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PropertyTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Infrastructure\Templates\PropertyTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
 </root>

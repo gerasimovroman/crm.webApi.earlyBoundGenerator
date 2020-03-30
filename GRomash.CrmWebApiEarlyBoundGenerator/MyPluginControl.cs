@@ -102,6 +102,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+                LogError($"Error on show main control {e.Message} {e.StackTrace}");
             }
         }
     }
