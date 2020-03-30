@@ -60,3 +60,5 @@ Update
 ```
 
 
+## Donations 
+[Donate](https://www.paypal.me/gerasimovromash "Donate")
