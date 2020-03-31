@@ -98,8 +98,6 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
             return propertyModels.ToArray();
         }
 
-      
-
         /// <summary>
         /// Gets the entity reference props.
         /// </summary>

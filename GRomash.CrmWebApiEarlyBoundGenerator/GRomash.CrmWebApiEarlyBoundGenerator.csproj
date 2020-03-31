@@ -204,6 +204,8 @@
     <Compile Include="Infrastructure\Model\PropertyModel.cs" />
     <Compile Include="Infrastructure\Model\EarlyBoundSettings.cs" />
     <Compile Include="Infrastructure\Model\SettingsPathPair.cs" />
+    <Compile Include="Infrastructure\Model\Settings\EntitiesGenerationSettings.cs" />
+    <Compile Include="Infrastructure\Model\Settings\OptionSetGenerationSetting.cs" />
     <Compile Include="Infrastructure\UnidecodeSharpFork\Characters.cs" />
     <Compile Include="Infrastructure\UnidecodeSharpFork\Unidecoder.cs" />
     <Compile Include="MyPlugin.cs" />

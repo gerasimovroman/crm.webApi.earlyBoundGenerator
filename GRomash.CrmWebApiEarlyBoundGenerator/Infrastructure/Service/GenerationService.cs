@@ -2,11 +2,14 @@
 using System.Linq;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory;
+using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model.Settings;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Repository;
 using Microsoft.Xrm.Sdk.Metadata;
 
 namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
 {
+   
+
     public class GenerationService
     {
         /// <summary>
@@ -26,25 +29,21 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
         /// <summary>
         /// Generates the entities.
         /// </summary>
-        /// <param name="nameSpace">The name space.</param>
-        /// <param name="outFolder">The out folder.</param>
-        /// <param name="entities">The entities.</param>
-        /// <param name="entityMetadatas">The entity metadatas.</param>
-        public void GenerateEntities(string nameSpace, string outFolder, string[] entities, IEnumerable<EntityMetadata> entityMetadatas)
+        /// <param name="entitiesGenerationSettings">The entities generation settings.</param>
+        public void GenerateEntities(EntitiesGenerationSettings entitiesGenerationSettings)
         {
             var fieldsFactory = new FieldsFactory();
-            var propsFactory = new PropertiesFactory(entities, _metadataRepository);
-
-            var entityClassBuilder = new EntityClassBuilder(outFolder);
-            var entityModelBuilder = new EntityModelBuilder(outFolder);
+            var propsFactory = new PropertiesFactory(entitiesGenerationSettings.Entities, _metadataRepository);
+            var entityClassBuilder = new EntityClassBuilder(entitiesGenerationSettings.OutFolder);
+            var entityModelBuilder = new EntityModelBuilder(entitiesGenerationSettings.OutFolder);
             var classFactory = new ClassFactory();
             
             //build Entity class
-            entityClassBuilder.Create(nameSpace);
+            entityClassBuilder.Create(entitiesGenerationSettings.NameSpace);
 
-            foreach (var entityMetadata in entityMetadatas)
+            foreach (var entityMetadata in entitiesGenerationSettings.EntityMetadatas)
             {
-                var classModel = classFactory.GetClassModel(entityMetadata, nameSpace);
+                var classModel = classFactory.GetClassModel(entityMetadata, entitiesGenerationSettings.NameSpace);
 
                 var relationshipMetadata = entityMetadata.OneToManyRelationships.Union(entityMetadata.ManyToOneRelationships).ToArray();
 
@@ -56,25 +55,23 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
                 classModel.PropertiesFields = fieldsFactory.GetProperties(entityMetadata.ManyToManyRelationships, entityMetadata.ManyToOneRelationships);
 
                 //build model class
-                entityModelBuilder.BuildClass(classModel, nameSpace);
+                entityModelBuilder.BuildClass(classModel, entitiesGenerationSettings.NameSpace);
             }
         }
 
         /// <summary>
         /// Generates the option sets.
         /// </summary>
-        /// <param name="nameSpace">The namespace.</param>
-        /// <param name="outFolder">The out folder.</param>
-        /// <param name="metadata">The metadata.</param>
-        public void GenerateOptionSets(string nameSpace, string outFolder, IEnumerable<EnumAttributeMetadata> metadata)
+        /// <param name="optionSetGenerationSetting">The option set generation setting.</param>
+        public void GenerateOptionSets(OptionSetGenerationSetting optionSetGenerationSetting)
         {
             var optionSetFactory = new OptionSetFactory(_metadataRepository);
-            var optionSetBuilder = new OptionSetBuilder(outFolder);
+            var optionSetBuilder = new OptionSetBuilder(optionSetGenerationSetting.OutFolder);
             var optionSetValueFactory = new OptionSetValueFactory();
 
-            foreach (var optionSetMetadata in metadata)
+            foreach (var optionSetMetadata in optionSetGenerationSetting.Metadata)
             {
-                var model = optionSetFactory.GetOptionSetModel(optionSetMetadata, nameSpace);
+                var model = optionSetFactory.GetOptionSetModel(optionSetMetadata, optionSetGenerationSetting.NameSpace);
                 model.Values = optionSetValueFactory.GetValues(optionSetMetadata).ToArray();
 
 

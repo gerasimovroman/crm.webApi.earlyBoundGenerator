@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using GRomash.CrmWebApiEarlyBoundGenerator.Command;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
+using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model.Settings;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Repository;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service;
 using McTools.Xrm.Connection;
@@ -309,6 +310,12 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [include option sets].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [include option sets]; otherwise, <c>false</c>.
+        /// </value>
         public bool IncludeOptionSets
         {
             get => _includeOptionSets;
@@ -355,11 +362,22 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
 
             _outputLoggerService.Info($"Generating entities");
 
-            _generationService.GenerateEntities(Namespace, ResultFolder, selectedEntities, metadata);
+            _generationService.GenerateEntities(new EntitiesGenerationSettings()
+            {
+                NameSpace = Namespace,
+                Entities = selectedEntities,
+                EntityMetadatas = metadata,
+                OutFolder = ResultFolder
+            });
 
             if (IncludeOptionSets)
             {
-                _generationService.GenerateOptionSets(Namespace, OptionSetsResultFolder, optionSetMetadata);
+                _generationService.GenerateOptionSets(new OptionSetGenerationSetting()
+                {
+                    Metadata = optionSetMetadata,
+                    NameSpace = Namespace,
+                    OutFolder = OptionSetsResultFolder
+                });
             }
 
             _outputLoggerService.Info($"Entities generated to {ResultFolder}");
