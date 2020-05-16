@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -13,7 +12,6 @@ using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Repository;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
-using NuGet;
 using XrmToolBox.Extensibility;
 
 namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels

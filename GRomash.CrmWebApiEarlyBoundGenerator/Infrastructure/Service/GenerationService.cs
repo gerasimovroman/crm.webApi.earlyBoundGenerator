@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model.Settings;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Repository;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
 {

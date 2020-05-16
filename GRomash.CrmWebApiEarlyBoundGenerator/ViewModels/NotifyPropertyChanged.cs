@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using GRomash.CrmWebApiEarlyBoundGenerator.Properties;
 
 namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
