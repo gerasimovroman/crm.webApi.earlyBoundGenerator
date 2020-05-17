@@ -28,16 +28,4 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D662132C-62B4-43C1-B7B8-682420B9FEDF}
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://gerasimovroman.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = GRomash.CrmWebApiEarlyBoundGenerator.Tests\\GRomash.CrmWebApiEarlyBoundGenerator.Tests.csproj
-		SccProjectName1 = GRomash.CrmWebApiEarlyBoundGenerator.Tests
-		SccLocalPath1 = GRomash.CrmWebApiEarlyBoundGenerator.Tests
-		SccProjectUniqueName2 = GRomash.CrmWebApiEarlyBoundGenerator\\GRomash.CrmWebApiEarlyBoundGenerator.csproj
-		SccProjectName2 = GRomash.CrmWebApiEarlyBoundGenerator
-		SccLocalPath2 = GRomash.CrmWebApiEarlyBoundGenerator
-	EndGlobalSection
 EndGlobal
