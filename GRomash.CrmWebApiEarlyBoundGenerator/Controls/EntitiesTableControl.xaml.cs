@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using GRomash.CrmWebApiEarlyBoundGenerator.Command;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Extensions;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
-using GRomash.CrmWebApiEarlyBoundGenerator.ViewModels;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace GRomash.CrmWebApiEarlyBoundGenerator.Controls
 {

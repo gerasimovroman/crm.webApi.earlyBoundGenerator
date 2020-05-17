@@ -1,17 +1,13 @@
 ﻿using System.CodeDom;
 using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
-using GRomash.CrmWebApiEarlyBoundGenerator.Properties;
 
 namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 {
     /// <summary>
     /// File builder
     /// </summary>
-    public class FileBuilder 
+    public class FileBuilder
     {
         /// <summary>
         /// The out folder
@@ -42,6 +38,12 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             return Path.Combine(_outFolder, fileName);
         }
 
+        /// <summary>
+        /// Generates the file.
+        /// </summary>
+        /// <param name="nameSpace">The name space.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="codeTypeDeclarations">The code type declarations.</param>
         protected void GenerateFile(string nameSpace, string fileName, params CodeTypeDeclaration[] codeTypeDeclarations)
         {
             var compileUnit = new CodeCompileUnit();
@@ -65,7 +67,6 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 provider.GenerateCodeFromCompileUnit(compileUnit, sourceFile, null);
             }
         }
-
 
         /// <summary>
         /// Adds the summary comment.

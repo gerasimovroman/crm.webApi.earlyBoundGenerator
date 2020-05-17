@@ -98,8 +98,6 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
             return propertyModels.ToArray();
         }
 
-      
-
         /// <summary>
         /// Gets the entity reference props.
         /// </summary>
@@ -117,14 +115,13 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                 {
                     var schemaName = attributeMetadata.SchemaName;
                     var propertyLogicalName = attributeMetadata.LogicalName;
+                    var lookupTargetEntity = ((LookupAttributeMetadata)attributeMetadata).Targets.FirstOrDefault();
                     var description = Helpers.GetDescription(attributeMetadata.Description);
                     var valueField = $"_{propertyLogicalName}_value";
-                    var relationship = oneToManyRelationshipMetadatas.FirstOrDefault(x => x.ReferencedAttribute == attributeMetadata.LogicalName ||
-                                                                                 x.ReferencingAttribute == attributeMetadata.LogicalName);
 
-                    if (relationship != null)
+                    if (lookupTargetEntity != null)
                     {
-                        var entityLogicalName = relationship.ReferencedEntity;
+                        var entityLogicalName = lookupTargetEntity;
                         var entityMetadata = _metadataRepository.GetEntityMetadata(entityLogicalName);
                         var entitySetName = entityMetadata.EntitySetName;
                         var type = Helpers.EntityReference;
@@ -170,7 +167,6 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                         }
                     }
                 }
-
             }
 
             return propertyModels.ToArray();

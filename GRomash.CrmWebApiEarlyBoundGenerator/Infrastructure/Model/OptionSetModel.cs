@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model
+﻿namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model
 {
     public class OptionSetModel
     {

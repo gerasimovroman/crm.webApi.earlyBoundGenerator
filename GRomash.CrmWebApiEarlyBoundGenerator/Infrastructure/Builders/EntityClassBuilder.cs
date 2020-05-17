@@ -1,12 +1,6 @@
 ﻿using System;
 using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.Dynamic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 {
@@ -26,11 +20,11 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
         /// <param name="nameSpace">The name space.</param>
         public void Create(string nameSpace)
         {
-            GenerateFile(nameSpace, "Entity", 
-                EntityCreate(), 
-                EntityReference(), 
-                EntityReferenceAttribute(), 
-                GetEntityAttribute(), 
+            GenerateFile(nameSpace, "Entity",
+                EntityCreate(),
+                EntityReference(),
+                EntityReferenceAttribute(),
+                GetEntityAttribute(),
                 CreateOnlyDateAttribute());
         }
 
@@ -217,12 +211,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 {
                     new CodeMethodReturnStatement(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(
                             new CodeThisReferenceExpression(),
-                            "GetAttributeValue",
-                            new[]
-                            {
-                                new CodeTypeReference(typeof(Guid))
-                            }
-                        ),
+                            "GetAttributeValue", new CodeTypeReference(typeof(Guid))),
                         new CodeMethodInvokeExpression(getIdAttributeMethodReferenceExpression)
                     ))
                 },
@@ -313,11 +302,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 Attributes = publicAndFinal,
                 Statements =
                 {
-                    new CodeMethodReturnStatement(new CodeObjectCreateExpression("EntityReference", new CodeExpression[]
-                    {
-                        new CodePropertyReferenceExpression(new CodeThisReferenceExpression(), "EntitySetName"),
-                        new CodePropertyReferenceExpression(new CodeThisReferenceExpression(), "Id"),
-                    }))
+                    new CodeMethodReturnStatement(new CodeObjectCreateExpression("EntityReference", new CodePropertyReferenceExpression(new CodeThisReferenceExpression(), "EntitySetName"), new CodePropertyReferenceExpression(new CodeThisReferenceExpression(), "Id")))
                 }
             };
             return toEntityReferenceMethod;
@@ -427,39 +412,24 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                                         new CodeMethodInvokeExpression(new CodeVariableReferenceExpression("key"),
                                             "ToLower")),
                                     new CodeConditionStatement(
-                                        new CodeSnippetExpression("value is DateTime dateTimeValue"),
-                                        new CodeStatement[]
-                                        {
-                                            new CodeVariableDeclarationStatement(new CodeTypeReference("var"),
-                                                "propertyForAttribute",
-                                                new CodeSnippetExpression(
-                                                    "GetPublicInstanceProperties().FirstOrDefault(x => x.Name.Equals(key, StringComparison.InvariantCultureIgnoreCase))")),
-                                            new CodeConditionStatement(
-                                                new CodeSnippetExpression("propertyForAttribute != null"),
-                                                new CodeStatement[]
-                                                {
-                                                    new CodeVariableDeclarationStatement(new CodeTypeReference("var"),
-                                                        "onlyDateAttr",
-                                                        new CodeMethodInvokeExpression(
-                                                            new CodeMethodReferenceExpression(
-                                                                new CodeVariableReferenceExpression(
-                                                                    "propertyForAttribute"), "GetCustomAttribute",
-                                                                new CodeTypeReference("OnlyDateAttribute")))),
-
-                                                    new CodeConditionStatement(
-                                                        new CodeSnippetExpression("onlyDateAttr != null"),
-                                                        new CodeStatement[]
-                                                        {
-                                                            new CodeAssignStatement(
-                                                                new CodeVariableReferenceExpression("value"),
-                                                                new CodeMethodInvokeExpression(
-                                                                    new CodeVariableReferenceExpression(
-                                                                        "dateTimeValue"), "ToString",
-                                                                    new CodeSnippetExpression(
-                                                                        "OnlyDateAttribute.Format")))
-                                                        }),
-                                                }),
-                                        }),
+                                        new CodeSnippetExpression("value is DateTime dateTimeValue"), new CodeVariableDeclarationStatement(new CodeTypeReference("var"),
+                                            "propertyForAttribute",
+                                            new CodeSnippetExpression(
+                                                "GetPublicInstanceProperties().FirstOrDefault(x => x.Name.Equals(key, StringComparison.InvariantCultureIgnoreCase))")), new CodeConditionStatement(
+                                            new CodeSnippetExpression("propertyForAttribute != null"), new CodeVariableDeclarationStatement(new CodeTypeReference("var"),
+                                                "onlyDateAttr",
+                                                new CodeMethodInvokeExpression(
+                                                    new CodeMethodReferenceExpression(
+                                                        new CodeVariableReferenceExpression(
+                                                            "propertyForAttribute"), "GetCustomAttribute",
+                                                        new CodeTypeReference("OnlyDateAttribute")))), new CodeConditionStatement(
+                                                new CodeSnippetExpression("onlyDateAttr != null"), new CodeAssignStatement(
+                                                    new CodeVariableReferenceExpression("value"),
+                                                    new CodeMethodInvokeExpression(
+                                                        new CodeVariableReferenceExpression(
+                                                            "dateTimeValue"), "ToString",
+                                                        new CodeSnippetExpression(
+                                                            "OnlyDateAttribute.Format")))))),
                                 }),
 
                             new CodeExpressionStatement(new CodeMethodInvokeExpression(
@@ -505,13 +475,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                         new CodeStatement[]
                         {
                             new CodeExpressionStatement(new CodeMethodInvokeExpression(
-                                new CodeMethodReferenceExpression(null, "Attributes"), "Add",
-                                new CodeExpression[]
-                                {
-                                    new CodeArgumentReferenceExpression("attributeName"),
-                                    new CodeArgumentReferenceExpression("value"),
-                                }
-                            ))
+                                new CodeMethodReferenceExpression(null, "Attributes"), "Add", new CodeArgumentReferenceExpression("attributeName"), new CodeArgumentReferenceExpression("value")))
                         }),
                 }
             };
@@ -603,126 +567,78 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                             new CodeVariableDeclarationStatement("Type", "convertValueToType",
                                 new CodePrimitiveExpression(null)),
 
-                            new CodeConditionStatement(new CodeSnippetExpression("value != null"), new CodeStatement[]
-                            {
-                                new CodeConditionStatement(new CodeSnippetExpression("value is string stringValue && " +
-                                                                                     "Guid.TryParse(stringValue, out var id)"),
-                                    new CodeStatement[]
+                            new CodeConditionStatement(new CodeSnippetExpression("value != null"), new CodeConditionStatement(new CodeSnippetExpression("value is string stringValue && " +
+                                                                                                                                                        "Guid.TryParse(stringValue, out var id)"),
+                                new CodeStatement[]
+                                {
+                                    new CodeAssignStatement(new CodeVariableReferenceExpression("value"),
+                                        new CodeVariableReferenceExpression("id")),
+                                    new CodeVariableDeclarationStatement("var", "propertyWithEntityRefAttribute")
                                     {
-                                        new CodeAssignStatement(new CodeVariableReferenceExpression("value"),
-                                            new CodeVariableReferenceExpression("id")),
-                                        new CodeVariableDeclarationStatement("var", "propertyWithEntityRefAttribute")
-                                        {
-                                            InitExpression = new CodeSnippetExpression(
-                                                "GetPublicInstanceProperties().FirstOrDefault(x => x.GetCustomAttribute<EntityReferenceAttribute>()?.ValueField == valueFieldName)")
-                                        },
-                                        new CodeConditionStatement(
-                                            new CodeSnippetExpression("propertyWithEntityRefAttribute != null"),
-                                            new CodeStatement[]
-                                            {
-                                                new CodeVariableDeclarationStatement("var", "entityReferenceAttribute",
-                                                    new CodeSnippetExpression(
-                                                        "propertyWithEntityRefAttribute.GetCustomAttribute<EntityReferenceAttribute>()")),
-                                                new CodeExpressionStatement(new CodeMethodInvokeExpression(
-                                                    new CodeVariableReferenceExpression(
-                                                        "propertyWithEntityRefAttribute"), "SetValue",
-                                                    new CodeThisReferenceExpression(),
-                                                    new CodeObjectCreateExpression("EntityReference",
-                                                        new CodeExpression[]
-                                                        {
-                                                            new CodePropertyReferenceExpression(
-                                                                new CodeVariableReferenceExpression(
-                                                                    "entityReferenceAttribute"), "EntitySetName"),
-                                                            new CodeVariableReferenceExpression("id"),
-                                                        }))),
-                                            }),
+                                        InitExpression = new CodeSnippetExpression(
+                                            "GetPublicInstanceProperties().FirstOrDefault(x => x.GetCustomAttribute<EntityReferenceAttribute>()?.ValueField?.Equals(valueFieldName, StringComparison.CurrentCultureIgnoreCase) == true)")
                                     },
-                                    new CodeStatement[]
-                                    {
-                                        new CodeConditionStatement(
-                                            new CodeSnippetExpression("value is ExpandoObject valueExpandoObject"),
-                                            new CodeStatement[]
-                                            {
-                                                new CodeVariableDeclarationStatement("var", "propertyWithEntityAttribute",
-                                                    new CodeSnippetExpression(
-                                                        "GetPublicInstanceProperties().FirstOrDefault(x => x.GetCustomAttribute<EntityAttribute>()?.AttributeName == valueFieldName)")),
-                                                new CodeConditionStatement(
-                                                    new CodeSnippetExpression("propertyWithEntityAttribute != null"),
-                                                    new CodeStatement[]
-                                                    {
-                                                        new CodeAssignStatement(new CodeVariableReferenceExpression("value"),
-                                                            new CodeSnippetExpression(
-                                                                "Activator.CreateInstance(propertyWithEntityAttribute.PropertyType, valueExpandoObject)"))
-                                                    }),
-                                            },
-                                            new CodeStatement[]
-                                            {
-                                                new CodeVariableDeclarationStatement("var", "propertyForField",
-                                                    new CodeSnippetExpression(
-                                                        "GetPublicInstanceProperties().FirstOrDefault(x => x.Name.Equals(valueFieldName, StringComparison.CurrentCultureIgnoreCase))")),
-                                                new CodeConditionStatement(
-                                                    new CodeSnippetExpression("propertyForField != null"), new CodeStatement[]
-                                                    {
-                                                        new CodeAssignStatement(
-                                                            new CodeVariableReferenceExpression("convertValueToType"),
-                                                            new CodePropertyReferenceExpression(
-                                                                new CodeVariableReferenceExpression("propertyForField"),
-                                                                "PropertyType")),
-                                                    }),
-                                            }
-                                        ),
-                                    }),
-                                new CodeConditionStatement(new CodeSnippetExpression("convertValueToType != null"),
-                                    new CodeStatement[]
-                                    {
-                                        new CodeConditionStatement(
+                                    new CodeConditionStatement(
+                                        new CodeSnippetExpression("propertyWithEntityRefAttribute != null"), new CodeVariableDeclarationStatement("var", "entityReferenceAttribute",
                                             new CodeSnippetExpression(
-                                                "convertValueToType.IsGenericType && " +
-                                                "convertValueToType.GetGenericTypeDefinition() == typeof(Nullable<>)"),
-                                            new CodeStatement[]
-                                            {
-                                                new CodeAssignStatement(
-                                                    new CodeVariableReferenceExpression("convertValueToType"),
+                                                "propertyWithEntityRefAttribute.GetCustomAttribute<EntityReferenceAttribute>()")), new CodeExpressionStatement(new CodeMethodInvokeExpression(
+                                            new CodeVariableReferenceExpression(
+                                                "propertyWithEntityRefAttribute"), "SetValue",
+                                            new CodeThisReferenceExpression(),
+                                            new CodeObjectCreateExpression("EntityReference", new CodePropertyReferenceExpression(
+                                                new CodeVariableReferenceExpression(
+                                                    "entityReferenceAttribute"), "EntitySetName"), new CodeVariableReferenceExpression("id"))))),
+                                },
+                                new CodeStatement[]
+                                {
+                                    new CodeConditionStatement(
+                                        new CodeSnippetExpression("value is ExpandoObject valueExpandoObject"),
+                                        new CodeStatement[]
+                                        {
+                                            new CodeVariableDeclarationStatement("var", "propertyWithEntityAttribute",
+                                                new CodeSnippetExpression(
+                                                    "GetPublicInstanceProperties().FirstOrDefault(x => x.GetCustomAttribute<EntityAttribute>()?.AttributeName?.Equals(valueFieldName, StringComparison.CurrentCultureIgnoreCase) == true)")),
+                                            new CodeConditionStatement(
+                                                new CodeSnippetExpression("propertyWithEntityAttribute != null"), new CodeAssignStatement(new CodeVariableReferenceExpression("value"),
                                                     new CodeSnippetExpression(
-                                                        "Nullable.GetUnderlyingType(convertValueToType)")),
-                                            }),
-
-                                        new CodeAssignStatement(new CodeVariableReferenceExpression("value"),
-                                            new CodeSnippetExpression("Convert.ChangeType(value, convertValueToType)")),
-                                    }),
-
-                                new CodeConditionStatement(new CodeMethodInvokeExpression(
-                                        new CodeVariableReferenceExpression("valueFieldName"),
-                                        "EndsWith",
-                                        new CodeVariableReferenceExpression("formattedAttributePostFix")),
-                                    new CodeStatement[]
-                                    {
-                                        new CodeExpressionStatement(new CodeMethodInvokeExpression(
-                                            new CodeVariableReferenceExpression("FormattedValues"), "Add",
-                                            new CodeExpression[]
-                                            {
-                                                new CodeMethodInvokeExpression(
-                                                    new CodeVariableReferenceExpression("valueFieldName"), "Replace",
-                                                    new CodeExpression[]
-                                                    {
-                                                        new CodeVariableReferenceExpression("formattedAttributePostFix"),
-                                                        new CodeSnippetExpression("string.Empty"),
-                                                    }),
-                                                new CodeSnippetExpression("value?.ToString()"),
-                                            })),
-                                    },
-                                    new CodeStatement[]
-                                    {
-                                        new CodeExpressionStatement(new CodeMethodInvokeExpression(
-                                            new CodeVariableReferenceExpression("Attributes"),
-                                            "Add",
-                                            new CodeExpression[]
-                                            {
-                                                new CodeVariableReferenceExpression("valueFieldName"),
-                                                new CodeVariableReferenceExpression("value"),
-                                            })),
-                                    }),
-                            })
+                                                        "Activator.CreateInstance(propertyWithEntityAttribute.PropertyType, valueExpandoObject)"))),
+                                        },
+                                        new CodeStatement[]
+                                        {
+                                            new CodeVariableDeclarationStatement("var", "propertyForField",
+                                                new CodeSnippetExpression(
+                                                    "GetPublicInstanceProperties().FirstOrDefault(x => x.Name.Equals(valueFieldName, StringComparison.CurrentCultureIgnoreCase) == true)")),
+                                            new CodeConditionStatement(
+                                                new CodeSnippetExpression("propertyForField != null"), new CodeAssignStatement(
+                                                    new CodeVariableReferenceExpression("convertValueToType"),
+                                                    new CodePropertyReferenceExpression(
+                                                        new CodeVariableReferenceExpression("propertyForField"),
+                                                        "PropertyType"))),
+                                        }
+                                    ),
+                                }), new CodeConditionStatement(new CodeSnippetExpression("convertValueToType != null"), new CodeConditionStatement(
+                                    new CodeSnippetExpression(
+                                        "convertValueToType.IsGenericType && " +
+                                        "convertValueToType.GetGenericTypeDefinition() == typeof(Nullable<>)"), new CodeAssignStatement(
+                                        new CodeVariableReferenceExpression("convertValueToType"),
+                                        new CodeSnippetExpression(
+                                            "Nullable.GetUnderlyingType(convertValueToType)"))), new CodeAssignStatement(new CodeVariableReferenceExpression("value"),
+                                    new CodeSnippetExpression("Convert.ChangeType(value, convertValueToType)"))), new CodeConditionStatement(new CodeMethodInvokeExpression(
+                                    new CodeVariableReferenceExpression("valueFieldName"),
+                                    "EndsWith",
+                                    new CodeVariableReferenceExpression("formattedAttributePostFix")),
+                                new CodeStatement[]
+                                {
+                                    new CodeExpressionStatement(new CodeMethodInvokeExpression(
+                                        new CodeVariableReferenceExpression("FormattedValues"), "Add", new CodeMethodInvokeExpression(
+                                            new CodeVariableReferenceExpression("valueFieldName"), "Replace", new CodeVariableReferenceExpression("formattedAttributePostFix"), new CodeSnippetExpression("string.Empty")), new CodeSnippetExpression("value?.ToString()"))),
+                                },
+                                new CodeStatement[]
+                                {
+                                    new CodeExpressionStatement(new CodeMethodInvokeExpression(
+                                        new CodeVariableReferenceExpression("Attributes"),
+                                        "Add", new CodeVariableReferenceExpression("valueFieldName"), new CodeVariableReferenceExpression("value"))),
+                                }))
                         }
                     }
                 }

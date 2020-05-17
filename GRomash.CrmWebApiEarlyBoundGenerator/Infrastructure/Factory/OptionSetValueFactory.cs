@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Extensions;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Static;
@@ -44,6 +42,17 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
         {
             var localizedLabels = label.LocalizedLabels.OrderByDescending(x => x.LanguageCode == Helpers.EnglishLanguageCode);
             var labelText = localizedLabels.First().Label.Unidecode().RemoveSpecialCharacters();
+
+            if (labelText.Length > 0)
+            {
+                if (char.IsDigit(labelText[0]))
+                {
+                    var stringBuilder = new StringBuilder(labelText);
+                    stringBuilder.Insert(0, "_");
+                    labelText = stringBuilder.ToString();
+                }
+            }
+
             return labelText;
         }
     }
