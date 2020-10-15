@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model.CustomAttributes;
@@ -111,7 +112,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
 
             foreach (var attributeMetadata in attributeMetadatas)
             {
-                if (attributeMetadata.AttributeType == AttributeTypeCode.Lookup)
+                if (FieldsFactory.IsLookup(attributeMetadata))
                 {
                     var schemaName = attributeMetadata.SchemaName;
                     var propertyLogicalName = attributeMetadata.LogicalName;
@@ -125,8 +126,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                         var entityMetadata = _metadataRepository.GetEntityMetadata(entityLogicalName);
                         var entitySetName = entityMetadata.EntitySetName;
                         var type = Helpers.EntityReference;
-                        var attributeName = $"{schemaName}@odata.bind";
-
+                        var attributeName = GetAttributeName(oneToManyRelationshipMetadatas, lookupTargetEntity, schemaName);
 
                         var entityReferenceAttributeModel = new EntityReferenceAttributeModel()
                         {
@@ -146,30 +146,74 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                             }
                         });
 
-
-                        if (_entities.Contains(entityLogicalName))
-                        {
-                            propertyModels.Add(new PropertyModel()
-                            {
-                                AttributeName = schemaName,
-                                Description = description,
-                                PropertyName = $"{schemaName}Entity",
-                                Type = entityMetadata.SchemaName,
-                                Attributes =
-                                {
-                                    new EntityAttributeModel()
-                                    {
-                                        EntityLogicalName = entityLogicalName,
-                                        AttributeName = schemaName
-                                    }
-                                }
-                            });
-                        }
+                        AddEntityPropertyIfContains(entityLogicalName, propertyModels, schemaName, description, entityMetadata);
                     }
                 }
             }
 
             return propertyModels.ToArray();
+        }
+
+        /// <summary>
+        /// Adds the entity property if contains.
+        /// </summary>
+        /// <param name="entityLogicalName">Name of the entity logical.</param>
+        /// <param name="propertyModels">The property models.</param>
+        /// <param name="schemaName">Name of the schema.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="entityMetadata">The entity metadata.</param>
+        private void AddEntityPropertyIfContains(string entityLogicalName, List<PropertyModel> propertyModels, string schemaName,
+            string description, EntityMetadata entityMetadata)
+        {
+            if (_entities.Contains(entityLogicalName))
+            {
+                propertyModels.Add(new PropertyModel()
+                {
+                    AttributeName = schemaName,
+                    Description = description,
+                    PropertyName = $"{schemaName}Entity",
+                    Type = entityMetadata.SchemaName,
+                    Attributes =
+                    {
+                        new EntityAttributeModel()
+                        {
+                            EntityLogicalName = entityLogicalName,
+                            AttributeName = schemaName
+                        }
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the attribute.
+        /// </summary>
+        /// <param name="oneToManyRelationshipMetadatas">The one to many relationship metadatas.</param>
+        /// <param name="lookupTargetEntity">The lookup target entity.</param>
+        /// <param name="schemaName">Name of the schema.</param>
+        /// <returns></returns>
+        private string GetAttributeName(OneToManyRelationshipMetadata[] oneToManyRelationshipMetadatas,
+            string lookupTargetEntity, string schemaName)
+        {
+            var relationships = oneToManyRelationshipMetadatas.Where(x =>
+                x.ReferencedEntity.Equals(lookupTargetEntity, StringComparison.OrdinalIgnoreCase)).ToArray();
+            var relationship = relationships.First();
+            var forAttribute = schemaName;
+
+            if (relationships.Length > 1)
+            {
+                relationship = relationships.FirstOrDefault(x =>
+                    x.ReferencingAttribute.Equals(schemaName, StringComparison.OrdinalIgnoreCase));
+            }
+
+
+            if (relationship != null)
+            {
+                forAttribute = relationship.ReferencingEntityNavigationPropertyName;
+            }
+
+            var attributeName = $"{forAttribute}@odata.bind";
+            return attributeName;
         }
     }
 }

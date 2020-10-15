@@ -53,6 +53,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             codeNamespace.Imports.Add(new CodeNamespaceImport("System"));
             codeNamespace.Imports.Add(new CodeNamespaceImport("System.Collections.Generic"));
             codeNamespace.Imports.Add(new CodeNamespaceImport("System.Dynamic"));
+            codeNamespace.Imports.Add(new CodeNamespaceImport("System.Diagnostics.CodeAnalysis"));
 
             var provider =
                 CodeDomProvider.CreateProvider("cs");
