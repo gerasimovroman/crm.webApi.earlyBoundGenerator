@@ -127,7 +127,8 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
         /// </returns>
         public static bool IsLookup(AttributeMetadata metadata)
         {
-            return metadata.AttributeType == AttributeTypeCode.Lookup;
+            return metadata.AttributeType == AttributeTypeCode.Lookup |
+                metadata.AttributeType == AttributeTypeCode.Owner;
         }
     }
 }
