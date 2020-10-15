@@ -37,6 +37,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 IsClass = true,
             };
 
+            type.CustomAttributes.Add(new CodeAttributeDeclaration("ExcludeFromCodeCoverageAttribute"));
 
             type.BaseTypes.Add(new CodeTypeReference("Entity"));
             type.Members.Add(new CodeMemberField()

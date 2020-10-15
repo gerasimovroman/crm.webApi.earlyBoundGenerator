@@ -45,6 +45,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 typeof(Attribute)
             }
             };
+
+            type.CustomAttributes.Add(new CodeAttributeDeclaration("ExcludeFromCodeCoverageAttribute"));
+
             type.Members.Add(new CodeMemberField()
             {
                 Type = new CodeTypeReference(typeof(string)),
@@ -70,6 +73,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                     typeof(Attribute)
                 }
             };
+
+            type.CustomAttributes.Add(new CodeAttributeDeclaration("ExcludeFromCodeCoverageAttribute"));
+
 
 
             type.Members.AddRange(CreateAutoProperty("EntityLogicalName", "_entityLogicalName", typeof(string)));
@@ -110,6 +116,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 }
             };
 
+            type.CustomAttributes.Add(new CodeAttributeDeclaration("ExcludeFromCodeCoverageAttribute"));
+
+
             type.Members.AddRange(CreateAutoProperty("EntitySetName", "_entitySetName", typeof(string)));
             type.Members.AddRange(CreateAutoProperty("ValueField", "_valueField", typeof(string)));
 
@@ -145,6 +154,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 IsClass = true,
             };
 
+            type.CustomAttributes.Add(new CodeAttributeDeclaration("ExcludeFromCodeCoverageAttribute"));
 
             type.Members.AddRange(CreateAutoProperty("EntitySetName", "_entitySetName", typeof(string)));
             type.Members.AddRange(CreateAutoProperty("EntityId", "_entityId", typeof(Guid)));
@@ -180,6 +190,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 IsClass = true,
             };
 
+            type.CustomAttributes.Add(new CodeAttributeDeclaration("ExcludeFromCodeCoverageAttribute"));
 
             var publicAndFinal = MemberAttributes.Public | MemberAttributes.Final;
 
@@ -402,6 +413,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                                 new CodeSnippetExpression("value is EntityReference entityReference"),
                                 new CodeStatement[]
                                 {
+                                    new CodeAssignStatement(new CodeVariableReferenceExpression("key"),
+                                        new CodeMethodInvokeExpression(new CodeVariableReferenceExpression("key"),
+                                            "ToLower")),
                                     new CodeAssignStatement(new CodeVariableReferenceExpression("value"),
                                         new CodeSnippetExpression(
                                             "$\"/{entityReference.EntitySetName}({entityReference.EntityId})\"")),
