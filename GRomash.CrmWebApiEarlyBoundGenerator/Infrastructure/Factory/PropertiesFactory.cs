@@ -116,17 +116,19 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                 {
                     var schemaName = attributeMetadata.SchemaName;
                     var propertyLogicalName = attributeMetadata.LogicalName;
-                    var lookupTargetEntity = ((LookupAttributeMetadata)attributeMetadata).Targets.FirstOrDefault();
+                    var lookupTargetEntitys = ((LookupAttributeMetadata)attributeMetadata).Targets;
                     var description = Helpers.GetDescription(attributeMetadata.Description);
                     var valueField = $"_{propertyLogicalName}_value";
+                    var isMultipleTargets = lookupTargetEntitys.Length > 1;
 
-                    if (lookupTargetEntity != null)
+                    foreach (var lookupTargetEntity in lookupTargetEntitys)
                     {
                         var entityLogicalName = lookupTargetEntity;
                         var entityMetadata = _metadataRepository.GetEntityMetadata(entityLogicalName);
                         var entitySetName = entityMetadata.EntitySetName;
-                        var type = Helpers.EntityReference;
-                        var attributeName = GetAttributeName(oneToManyRelationshipMetadatas, lookupTargetEntity, schemaName);
+                        
+                        var attributeName = GetAttributeName(oneToManyRelationshipMetadatas, lookupTargetEntity,
+                            schemaName);
 
                         var entityReferenceAttributeModel = new EntityReferenceAttributeModel()
                         {
@@ -138,15 +140,16 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                         {
                             AttributeName = attributeName,
                             Description = description,
-                            PropertyName = schemaName,
-                            Type = type,
+                            PropertyName = isMultipleTargets ? $"{schemaName}_{entityMetadata.SchemaName}" : schemaName,
+                            Type = Helpers.EntityReference,
                             Attributes =
                             {
                                 entityReferenceAttributeModel
                             }
                         });
 
-                        AddEntityPropertyIfContains(entityLogicalName, propertyModels, schemaName, description, entityMetadata);
+                        AddEntityPropertyIfContains(entityLogicalName, propertyModels, schemaName, description,
+                            entityMetadata);
                     }
                 }
             }
@@ -197,7 +200,8 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
         {
             var relationships = oneToManyRelationshipMetadatas.Where(x =>
                 x.ReferencedEntity.Equals(lookupTargetEntity, StringComparison.OrdinalIgnoreCase)).ToArray();
-            var relationship = relationships.First();
+            var relationship = relationships.FirstOrDefault();
+
             var forAttribute = schemaName;
 
             if (relationships.Length > 1)
