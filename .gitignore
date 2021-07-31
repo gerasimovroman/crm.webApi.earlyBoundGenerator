@@ -12,3 +12,4 @@ bin
 obj
 packages
 /GRomash.CrmWebApiEarlyBoundGenerator/.vs
+/GRomash.CrmWebApiEarlyBoundGenerator.Tests/GenerationTest.cs
