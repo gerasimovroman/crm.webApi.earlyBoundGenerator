@@ -100,6 +100,14 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         /// All entities
         /// </summary>
         private EntityModel[] _allEntities;
+        /// <summary>
+        /// Decorate class members with JsonProperty attribute
+        /// </summary>
+        private bool includeJsonAttribute;
+        /// <summary>
+        /// Generate classes as partial for extensibility
+        /// </summary>
+        private bool generatePartialClasses;
         #endregion
 
         /// <summary>
@@ -137,6 +145,25 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
                     nameof(Settings), $"{_connectionDetail.ConnectionName}.json");
             }
         }
+
+        /// <summary>
+        /// Generate classes as partial for extensibility
+        /// </summary>
+        public bool GeneratePartialClasses
+        {
+            get => generatePartialClasses;
+            set => OnPropertyChanged<bool>(nameof(GeneratePartialClasses), value, ref generatePartialClasses);
+        }
+
+        /// <summary>
+        /// Decorate class members with JsonProperty attribute
+        /// </summary>
+        public bool IncludeJsonAttribute
+        {
+            get => includeJsonAttribute;
+            set => OnPropertyChanged<bool>(nameof(IncludeJsonAttribute), value, ref includeJsonAttribute);
+        }
+
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is loading.
@@ -365,7 +392,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
                 NameSpace = Namespace,
                 Entities = selectedEntities,
                 EntityMetadatas = metadata,
-                OutFolder = ResultFolder
+                OutFolder = ResultFolder,
+                IncludeJsonAttribute = IncludeJsonAttribute,
+                GeneratePartialClasses = GeneratePartialClasses
             });
 
             if (IncludeOptionSets)
@@ -443,6 +472,8 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
             Namespace = _earlyBoundSettings.Namespace;
             ResultFolder = _earlyBoundSettings.ResultFolder;
             IncludeOptionSets = _earlyBoundSettings.IncludeOptionSets;
+            GeneratePartialClasses = _earlyBoundSettings.GeneratePartialClasses;
+            IncludeJsonAttribute = _earlyBoundSettings.IncludeJsonAttribute;
             SetEntities();
         }
 
@@ -471,6 +502,8 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
             _earlyBoundSettings.Entitites = GetSelectedEntities();
             _earlyBoundSettings.ResultFolder = ResultFolder;
             _earlyBoundSettings.IncludeOptionSets = IncludeOptionSets;
+            _earlyBoundSettings.GeneratePartialClasses = GeneratePartialClasses;
+            _earlyBoundSettings.IncludeJsonAttribute = IncludeJsonAttribute;
 
             _earlyBoundSettingsRepository.Save(SettingsPath, _earlyBoundSettings);
 

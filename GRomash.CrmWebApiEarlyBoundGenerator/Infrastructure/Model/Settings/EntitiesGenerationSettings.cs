@@ -9,5 +9,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model.Settings
         public string OutFolder { get; set; }
         public string[] Entities { get; set; }
         public IEnumerable<EntityMetadata> EntityMetadatas { get; set; }
+
+        public bool GeneratePartialClasses { get; set; }
+
+        public bool IncludeJsonAttribute { get; set; }
     }
 }

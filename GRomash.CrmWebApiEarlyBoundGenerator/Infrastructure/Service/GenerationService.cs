@@ -41,7 +41,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Service
 
             foreach (var entityMetadata in entitiesGenerationSettings.EntityMetadatas)
             {
-                var classModel = classFactory.GetClassModel(entityMetadata, entitiesGenerationSettings.NameSpace);
+                var classModel = classFactory.GetClassModel(entityMetadata, entitiesGenerationSettings.NameSpace, entitiesGenerationSettings.IncludeJsonAttribute, entitiesGenerationSettings.GeneratePartialClasses);
 
                 var relationshipMetadata = entityMetadata.OneToManyRelationships.Union(entityMetadata.ManyToOneRelationships).ToArray();
 
