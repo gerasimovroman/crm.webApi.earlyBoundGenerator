@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model;
+using GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Model.CustomAttributes;
 
 namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
 {
@@ -35,6 +36,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             var type = new CodeTypeDeclaration(model.EntityName)
             {
                 IsClass = true,
+                IsPartial = model.GeneratePartialClasses
             };
 
             type.CustomAttributes.Add(new CodeAttributeDeclaration("ExcludeFromCodeCoverageAttribute"));
@@ -81,7 +83,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
             type.Members.Add(GetFieldsClass(model.PrimaryIdAttribute, model.Fields));
             type.Members.Add(GetProps(model.PropertiesFields));
             type.Members.Add(GetSchemas(model.Schemas));
-            type.Members.AddRange(GetProperties(model.Properties));
+            type.Members.AddRange(GetProperties(model));
 
 
             return type;
@@ -159,9 +161,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
         /// </summary>
         /// <param name="properties">The properties.</param>
         /// <returns></returns>
-        private CodeTypeMember[] GetProperties(IEnumerable<PropertyModel> properties)
+        private CodeTypeMember[] GetProperties(ClassModel model)
         {
-            return properties.Select(x =>
+            return model.Properties.Select(x =>
             {
                 var codeMemberProperty = new CodeMemberProperty()
                 {
@@ -188,6 +190,13 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Builders
                 };
 
                 AddSummaryComment(codeMemberProperty, x.Description);
+
+                if (model.IncludeJsonAttribute)
+                {
+                    string jsonName = model.Fields.FirstOrDefault(f => f.FieldName == x.AttributeName)?.AttributeName;
+                    if (!string.IsNullOrEmpty(jsonName))
+                        x.Attributes.Add(new JsonPropertyAttributeModel(jsonName));
+                }
 
                 codeMemberProperty.CustomAttributes.AddRange(x.Attributes.Select(y =>
                 {

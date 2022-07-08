@@ -23,5 +23,14 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        protected virtual void OnPropertyChanged<T>(string propertyName, T value, ref T field)
+        {
+            if (!value.Equals(field))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+            }
+        }
     }
 }

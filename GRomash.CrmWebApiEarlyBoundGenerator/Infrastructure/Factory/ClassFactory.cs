@@ -11,7 +11,7 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
         /// <param name="entityMetadata">The entity metadata.</param>
         /// <param name="nameSpace">The name space.</param>
         /// <returns></returns>
-        public ClassModel GetClassModel(EntityMetadata entityMetadata, string nameSpace)
+        public ClassModel GetClassModel(EntityMetadata entityMetadata, string nameSpace, bool includeJsonAttribute, bool generatePartialClasses)
         {
             var classModel = new ClassModel
             {
@@ -19,7 +19,9 @@ namespace GRomash.CrmWebApiEarlyBoundGenerator.Infrastructure.Factory
                 EntityName = entityMetadata.SchemaName,
                 PrimaryIdAttribute = entityMetadata.PrimaryIdAttribute,
                 EntitySetName = GetEntitySetName(entityMetadata),
-                EntityLogicalName = entityMetadata.LogicalName
+                EntityLogicalName = entityMetadata.LogicalName,
+                GeneratePartialClasses = generatePartialClasses,
+                IncludeJsonAttribute = includeJsonAttribute
             };
 
             return classModel;

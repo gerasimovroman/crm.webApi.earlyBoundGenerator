@@ -19,5 +19,9 @@
         public FieldModel[] PropertiesFields { get; set; }
 
         public FieldModel[] Schemas { get; set; }
+
+        public bool GeneratePartialClasses { get; set; }
+
+        public bool IncludeJsonAttribute { get; set; }
     }
 }

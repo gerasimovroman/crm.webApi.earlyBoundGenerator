@@ -196,6 +196,7 @@
     <Compile Include="Infrastructure\Model\CustomAttributes\CustomAttribute.cs" />
     <Compile Include="Infrastructure\Model\CustomAttributes\DateOnlyAttributeModel.cs" />
     <Compile Include="Infrastructure\Model\CustomAttributes\EntityAttributeModel.cs" />
+    <Compile Include="Infrastructure\Model\CustomAttributes\JsonPropertyAttributeModel.cs" />
     <Compile Include="Infrastructure\Model\EntityModel.cs" />
     <Compile Include="Infrastructure\Model\CustomAttributes\EntityReferenceAttributeModel.cs" />
     <Compile Include="Infrastructure\Model\FieldModel.cs" />
